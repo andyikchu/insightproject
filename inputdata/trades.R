@@ -1,0 +1,25 @@
+args=commandArgs=TRUE
+traderIDfile=args[1] #file of user IDs
+tickerIDfile=args[2] #file of ticker names
+numtraders_persec=args[3] #number of traders making trades every second
+
+#traderIDs = read.csv()
+traderIDs = seq(1,10000000)
+#tickerIDs = read.csv()
+tickerIDs = paste0("ti", seq(1,2000))
+numtraders_persec=100000
+
+generate_trades = function() {
+	#select numtraders_persec from traderIDs
+	trades = data.frame(trader=sample(traderIDs, numtraders_persec))
+	#associate a ticker name to trade from every trader
+	trades["ticker"] = sample(tickerIDs, nrow(trades), replace=T)
+	#associate a quantity of stock to buy or sell for each trade
+	trades["numstocks"] = floor(rnorm(nrow(trades), mean=0, sd=500))
+	write.csv(trades, file=paste0("trades", Sys.time(), ".txt"), quote=F, sep=",", row.names=F)
+}
+
+while(1) {
+	generate_trades()
+	Sys.sleep(1)
+}
