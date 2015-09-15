@@ -4,10 +4,10 @@ tickerIDfile=args[2] #file of ticker names
 numtraders_persec=args[3] #number of traders making trades every second
 
 #traderIDs = read.csv()
-traderIDs = seq(1,10000000)
+traderIDs = seq(1,5)
 #tickerIDs = read.csv()
-tickerIDs = paste0("ti", seq(1,2000))
-numtraders_persec=100000
+tickerIDs = paste0("ti", seq(1,2))
+numtraders_persec=1
 
 generate_trades = function() {
 	#select numtraders_persec from traderIDs
@@ -21,5 +21,5 @@ generate_trades = function() {
 
 while(1) {
 	generate_trades()
-	Sys.sleep(1)
+	Sys.sleep(30)
 }
