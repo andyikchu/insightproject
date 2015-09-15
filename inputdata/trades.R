@@ -7,7 +7,16 @@ numtraders_persec=args[3] #number of traders making trades every second
 traderIDs = seq(1,5)
 #tickerIDs = read.csv()
 tickerIDs = paste0("ti", seq(1,2))
-numtraders_persec=1
+numtraders_persec=2
+
+library(rkafka)
+kafkanode="ec2-54-67-10-231.us-west-1.compute.amazonaws.com:9092"
+producer=rkafka.createProducer(kafkanode)
+
+make_json_message = function(trader, stock, amount) {
+
+	message = paste0('{"user":', trader, ', "company":"', stock,'", "numstock":', amount,'}')
+}
 
 generate_trades = function() {
 	#select numtraders_persec from traderIDs
@@ -16,10 +25,16 @@ generate_trades = function() {
 	trades["ticker"] = sample(tickerIDs, nrow(trades), replace=T)
 	#associate a quantity of stock to buy or sell for each trade
 	trades["numstocks"] = floor(rnorm(nrow(trades), mean=0, sd=500))
-	write.csv(trades, file=paste0("trades", Sys.time(), ".txt"), quote=F, sep=",", row.names=F)
+	
+	for(i in 1:nrow(trades)) {
+		message = paste0('{"user":', trades[i,"trader"], ', "company":"', trades[i,"ticker"],'", "numstock":', trades[i,"numstocks"],'}')
+		rkafka.send(producer, "trades", kafkanode, message)
+	}
 }
 
 while(1) {
 	generate_trades()
 	Sys.sleep(30)
 }
+
+rkafka.closeProducer(producer)
