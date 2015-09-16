@@ -13,11 +13,6 @@ library(rkafka)
 kafkanode="ec2-54-67-10-231.us-west-1.compute.amazonaws.com:9092"
 producer=rkafka.createProducer(kafkanode)
 
-make_json_message = function(trader, stock, amount) {
-
-	message = paste0('{"user":', trader, ', "company":"', stock,'", "numstock":', amount,'}')
-}
-
 generate_trades = function() {
 	#select numtraders_persec from traderIDs
 	trades = data.frame(trader=sample(traderIDs, numtraders_persec))
@@ -27,7 +22,7 @@ generate_trades = function() {
 	trades["numstocks"] = floor(rnorm(nrow(trades), mean=0, sd=500))
 	
 	for(i in 1:nrow(trades)) {
-		message = paste0('{"user":', trades[i,"trader"], ', "company":"', trades[i,"ticker"],'", "numstock":', trades[i,"numstocks"],'}')
+		message = paste0('{"user":', trades[i,"trader"], ', "company":"', trades[i,"ticker"],'", "numstock":', trades[i,"numstocks"], ', "timestamp":"', Sys.time() '"}')
 		rkafka.send(producer, "trades", kafkanode, message)
 	}
 }
