@@ -22,7 +22,7 @@ generate_trades = function() {
 	trades["numstocks"] = floor(rnorm(nrow(trades), mean=0, sd=500))
 	
 	for(i in 1:nrow(trades)) {
-		message = paste0('{"user":', trades[i,"trader"], ', "company":"', trades[i,"ticker"],'", "numstock":', trades[i,"numstocks"], ', "timestamp":"', Sys.time() '"}')
+		message = paste0('{"user":', trades[i,"trader"], ', "company":"', trades[i,"ticker"],'", "numstock":', trades[i,"numstocks"], ', "timestamp":"', Sys.time(), '"}')
 		rkafka.send(producer, "trades", kafkanode, message)
 	}
 }
