@@ -15,10 +15,24 @@ def index():
 @app.route('/tradesummary/<user>')
 
 def get_trade_summary(user):
-    stmt = "SELECT * FROM stock_counts WHERE user=%s"
-    response = session.execute(stmt, parameters=[user])
-    response_list = []
-    for val in response:
-        response_list.append(val)
-    jsonresponse = [{"user": x.user, "company": x.company, "stock_total": x.stock_total, "portfolio_total": x.portfolio_total, "contact_limit": x.contact_limit, "portfolio_ratio": x.portfolio_ratio} for x in response_list]
+    portfolio = {}
+    portfolio_total = 0
+    contact_limit = 0
+
+    #TODO: fix logic in calculating total counts
+    stmt = "SELECT company, stock_total, contact_limit FROM stock_counts WHERE user=%s"
+    stock_counts = session.execute(stmt, parameters=[user])
+    for c in stock_counts:
+        portfolio[c.company] = c.stock_total
+        contact_limit = c.contact_limit
+
+    stmt = "SELECT company, SUM(numstock) FROM trade_history WHERE user=%s GROUP BY company"
+    new_trades = session.execute(stmt, parameters=[user])
+    for n in new_trades:
+        portfolio[n.company] += n.stock_total
+    
+    for company in portfolio:
+        portfolio_total += portfolio[company]
+     
+    jsonresponse = [{"user": user, "company": company, "stock_total": portfolio[company], "portfolio_total": portfolio_total, "contact_limit": contact_limit, "portfolio_ratio": portfolio[company]/portfolio_total} for company in portfolio]
     return jsonify(tradesummary=jsonresponse)
