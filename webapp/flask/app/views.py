@@ -26,7 +26,7 @@ def get_trade_summary(user):
         portfolio[c.company] = c.stock_total
         contact_limit = c.contact_limit
 
-    stmt = "SELECT company, SUM(numstock) FROM trade_history WHERE user=%s GROUP BY company"
+    stmt = "SELECT company, numstock FROM trade_history WHERE user=%s"
     new_trades = session.execute(stmt, parameters=[user])
     for n in new_trades:
         portfolio[n.company] += n.stock_total
