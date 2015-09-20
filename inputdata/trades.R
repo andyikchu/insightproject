@@ -1,7 +1,7 @@
 set.seed(1)
 
 traderIDs = seq(1,1000000)
-tickerIDs = c("MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV" "UNH", "UTX", "VZ", "V", "WMT", "DIS")
+tickerIDs = c("MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS")
 numtraders_persec=500000
 
 library(rkafka)
