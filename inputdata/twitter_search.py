@@ -2,6 +2,8 @@ from twython import Twython
 import urllib3.contrib.pyopenssl
 urllib3.contrib.pyopenssl.inject_into_urllib3()
 
+#poll twitter to get a historical set of tweets about companies for synthetic tweet generation
+
 #TODO: load from external file for all producers
 COMPANIES = ["MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS"]
 
@@ -20,9 +22,9 @@ for co in COMPANIES:
 
     results = t.search(q=co, count=100)
     for res in results['statuses']:
-        text = res['text']
+        text = res['text'].replace('\n', ' ')
         source = 'https://twitter.com/' + res['user']['name'] + '/status/' + str(res['id'])
 
         json = '{"company":"' + co + '", "summary":"' + text +'", "source":"' + source + '"}'
-        dump.write(json.encode('utf-8').strip())
+        dump.write(json.encode('utf-8').strip() + "\n")
     dump.close
