@@ -6,7 +6,7 @@ urllib3.contrib.pyopenssl.inject_into_urllib3()
 #TODO: load from external file for all producers
 COMPANIES = ["MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS"]
 
-COMPANIES = list('#' + company for company in COMPANIES)
+COMPANIES = list('$' + company for company in COMPANIES)
 
 keyfile = open("/home/ubuntu/.twitterkeys/keys.txt", "r")
 TWITTERKEYS = dict(line.rstrip().split(": ") for line in keyfile)
