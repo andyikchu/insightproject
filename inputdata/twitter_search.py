@@ -25,6 +25,6 @@ for co in COMPANIES:
         text = res['text'].replace('\n', ' ')
         source = 'https://twitter.com/' + res['user']['name'] + '/status/' + str(res['id'])
 
-        json = '{"company":"' + co + '", "summary":"' + text +'", "source":"' + source + '"}'
+        json = '{"company":"' + co + '", "summary":"' + text + '", "source":"' + source + '", "author":"' + res['user']['name'] + '"}'
         dump.write(json.encode('utf-8').strip() + "\n")
     dump.close
