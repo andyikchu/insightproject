@@ -18,7 +18,7 @@ ACCESS_TOKEN = t.obtain_access_token()
 t = Twython(TWITTERKEYS['consumer key'], access_token=ACCESS_TOKEN)
 
 for co in COMPANIES:
-    dump = open("/home/ubuntu/synthetic_twitter/" + co + ".txt", "a")
+    dump = open("/home/ubuntu/synthetic_twitter/" + co + ".txt", "w")
 
     results = t.search(q=co, count=100)
     for res in results['statuses']:
