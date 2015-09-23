@@ -1,7 +1,7 @@
 from kafka import KafkaConsumer
-
 from cassandra.cluster import Cluster
 from cassandra import ConsistencyLevel
+import json
 
 #connect to Kafka
 consumer = KafkaConsumer('trades',
