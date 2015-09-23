@@ -74,14 +74,14 @@ def calculate_portfolio_total(company_stock, total_stock, tradeamount):
         #previously held 0 shares, add the amount being traded to portfolio total
         return total_stock + abs(tradeamount)
 
-getcount_rts1 = makest_getcount("stock_counts_rts1")
-getcount_rts2 = makest_getcount("stock_counts_rts2")
-gettotal_rts1 = makest_gettotal("stock_totals_rts1")
-gettotal_rts2 = makest_gettotal("stock_totals_rts2")
-setcount_rts1 = makest_setcount("stock_counts_rts1")
-setcount_rts2 = makest_setcount("stock_counts_rts2")
-settotal_rts1 = makest_settotal("stock_totals_rts1")
-settotal_rts2 = makest_settotal("stock_totals_rts2")
+st_getcount_rts1 = makest_getcount("stock_counts_rts1")
+st_getcount_rts2 = makest_getcount("stock_counts_rts2")
+st_gettotal_rts1 = makest_gettotal("stock_totals_rts1")
+st_gettotal_rts2 = makest_gettotal("stock_totals_rts2")
+st_setcount_rts1 = makest_setcount("stock_counts_rts1")
+st_setcount_rts2 = makest_setcount("stock_counts_rts2")
+st_settotal_rts1 = makest_settotal("stock_totals_rts1")
+st_settotal_rts2 = makest_settotal("stock_totals_rts2")
 
 for message in consumer:
     j = json.loads(message.value)
