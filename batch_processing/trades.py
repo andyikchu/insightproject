@@ -6,7 +6,7 @@ from cqlengine.connection import get_session
 sc = SparkContext(appName="Finance News") 
 sqlContext = SQLContext(sc) 
 
-df = sqlContext.read.json("hdfs://ec2-52-8-238-175.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*")
+df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*")
 
 #calculate current stock count holdings for each user and company
 df.registerTempTable("trade_history")
@@ -34,7 +34,7 @@ def AddToCassandra_stockcountsbatch_bypartition(d_iter):
     from cqlengine import connection
     from cqlengine.management import sync_table
     
-    class stock_counts(Model):
+    class stock_counts_batch(Model):
         user = columns.Text(primary_key=True)
         company = columns.Text()
         stock_total = columns.Integer()
@@ -42,17 +42,11 @@ def AddToCassandra_stockcountsbatch_bypartition(d_iter):
         portfolio_ratio = columns.Float(primary_key=True)
         contact_limit = columns.Float()
         
-    host="ec2-54-67-10-231.us-west-1.compute.amazonaws.com"
+    host="ec2-54-215-237-86.us-west-1.compute.amazonaws.com" #cassandra seed node, TODO: do not hard code this
     connection.setup([host], "finance_news")
-    sync_table(stock_counts)
+    sync_table(stock_counts_batch)
     for d in d_iter:
-        stock_counts.create(**d)
-
-#truncate table and set new values for each batch processing run
-host="ec2-54-67-10-231.us-west-1.compute.amazonaws.com"
-connection.setup([host], "finance_news")
-session = get_session()
-session.execute("TRUNCATE finance_news.stock_counts")
+        stock_counts_batch.create(**d)
 
 AddToCassandra_stockcountsbatch_bypartition([])
 rdd_cassandra.foreachPartition(AddToCassandra_stockcountsbatch_bypartition)
