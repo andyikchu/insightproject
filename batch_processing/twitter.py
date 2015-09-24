@@ -3,8 +3,7 @@ from pyspark.sql import SQLContext
 from pyspark.sql import Window
 from cqlengine import connection
 from cqlengine.connection import get_session
-
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 sc = SparkContext(appName="Finance News") 
 sqlContext = SQLContext(sc) 
@@ -16,9 +15,9 @@ df_latest_news = sqlContext.sql("SELECT * FROM news_history WHERE newstime > '" 
 
 rdd_cassandra = df_latest_news.map(lambda r: {"company": r.company.replace('$', ''),
     "summary": r.summary,
-    "newstime": r.newstime,
+    "newstime": datetime.strptime(r.newstime, "%a %b %d %H:%M:%S %Y").strftime("%Y-%m-%d %H:%M:%S"),
     "author": r.author,
-    "source": r.source
+    "source": r.source,
     "newsoutlet": r.newsoutlet})
 
 #save to Cassandra
