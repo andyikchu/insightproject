@@ -89,10 +89,12 @@ for message in consumer:
     company = j["company"]
     tradeamount = j["numstock"]
     #get current value from each stream DB
-    rts1_stocks = session.execute(st_getcount_rts1, (user, company))
-    rts2_stocks = session.execute(st_getcount_rts2, (user, company))
-    rts1_totals = session.execute(st_gettotal_rts1, (user))
-    rts2_totals = session.execute(st_gettotal_rts2, (user))
+    rts1_stocks = session.execute(st_getcount_rts1, (user, company, ))
+    rts2_stocks = session.execute(st_getcount_rts2, (user, company, ))
+    print rts1_stocks
+    print user
+    rts1_totals = session.execute(st_gettotal_rts1, (user, ))
+    rts2_totals = session.execute(st_gettotal_rts2, (user, ))
     #set new value for stock_total, portfolio_total, and portfolio_ratio by summing retrieved values
     #if this is a new user/company combination, set current counts as 0, contact_limit as default
     rts1_stock = 0 if len(rts1_stocks) == 0 else rts1_stocks[0].stock_total
@@ -107,7 +109,7 @@ for message in consumer:
     rts1_stock += tradeamount
     rts2_stock += tradeamount
 
-    session.execute(st_setcount_rts1,(user, company, rts1_stock, abs(rts1_stock)/float(rts1_total), rts1_contact))
-    session.execute(st_setcount_rts2,(user, company, rts2_stock, abs(rts2_stock)/float(rts2_total), rts2_contact))
-    session.execute(st_settotal_rts1,(user, rts1_total))
-    session.execute(st_settotal_rts2,(user, rts2_total))
+    session.execute(st_setcount_rts1,(user, company, rts1_stock, abs(rts1_stock)/float(rts1_total), rts1_contact,))
+    session.execute(st_setcount_rts2,(user, company, rts2_stock, abs(rts2_stock)/float(rts2_total), rts2_contact,))
+    session.execute(st_settotal_rts1,(user, rts1_total,))
+    session.execute(st_settotal_rts2,(user, rts2_total,))
