@@ -40,6 +40,7 @@ def makest_settotal(table):
     settotal = "INSERT INTO " + table + " (user, portfolio_total) VALUES (?,?)"
     st_settotal = session.prepare(settotal)
     st_settotal.consistency_level = ConsistencyLevel.LOCAL_QUORUM
+    return st_settotal
 
 def calculate_portfolio_total(company_stock, total_stock, tradeamount):
     if company_stock > 0:
