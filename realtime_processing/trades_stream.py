@@ -91,8 +91,6 @@ for message in consumer:
     #get current value from each stream DB
     rts1_stocks = session.execute(st_getcount_rts1, (user, company, ))
     rts2_stocks = session.execute(st_getcount_rts2, (user, company, ))
-    print rts1_stocks
-    print user
     rts1_totals = session.execute(st_gettotal_rts1, (user, ))
     rts2_totals = session.execute(st_gettotal_rts2, (user, ))
     #set new value for stock_total, portfolio_total, and portfolio_ratio by summing retrieved values
