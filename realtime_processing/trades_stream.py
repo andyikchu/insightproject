@@ -108,7 +108,17 @@ for message in consumer:
     rts1_stock += tradeamount
     rts2_stock += tradeamount
 
-    session.execute(st_setcount_rts1,(user, company, rts1_stock, abs(rts1_stock)/float(rts1_total), rts1_contact,))
-    session.execute(st_setcount_rts2,(user, company, rts2_stock, abs(rts2_stock)/float(rts2_total), rts2_contact,))
+    if rts1_stock == 0 && rts1_total == 0:
+        rts1_ratio = 0
+    else:
+        rts1_ratio = abs(rts1_stock)/float(rts1_total)
+    if rts2_stock == 0 && rts2_total == 0:
+        rts2_ratio = 0
+    else:
+        rts2_ratio = abs(rts2_stock)/float(rts2_total)
+
+
+    session.execute(st_setcount_rts1,(user, company, rts1_stock, rts1_ratio, rts1_contact,))
+    session.execute(st_setcount_rts2,(user, company, rts2_stock, rts2_ratio, rts2_contact,))
     session.execute(st_settotal_rts1,(user, rts1_total,))
     session.execute(st_settotal_rts2,(user, rts2_total,))
