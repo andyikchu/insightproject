@@ -25,8 +25,10 @@ rdd_stockcounts = df_cassandra.map(lambda r: {"user": str(r.stockcount_user),
     "stock_total": r.stock_total,
     "portfolio_ratio": abs(r.stock_total) / float(r.portfolio_total),
     "contact_limit": 0.25})
+rdd_stockcounts.persist(StorageLevel.MEMORY_AND_DISK_SER)
 rdd_totals = df_cassandra.map(lambda r: lambda r: {"user": str(r.stockcount_user), 
     "portfolio_total": r.portfolio_total})
+rdd_totals.persist(StorageLevel.MEMORY_AND_DISK_SER)
 
 #save to Cassandra
 def AddToCassandra_stockcountsbatch_bypartition(d_iter):
