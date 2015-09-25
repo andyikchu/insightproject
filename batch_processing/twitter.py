@@ -5,7 +5,7 @@ from cqlengine import connection
 from cqlengine.connection import get_session
 from datetime import date, timedelta, datetime
 
-sc = SparkContext(appName="Finance News") 
+sc = SparkContext(appName="Finance News, News Batch") 
 sqlContext = SQLContext(sc) 
 
 df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/twitter/*/*/*/*/*/*")
