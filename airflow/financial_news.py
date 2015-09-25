@@ -77,7 +77,7 @@ task7_swap_web_db_rts2 =  BashOperator(
         task_id = '07_web_rts2',
         bash_command='bash tasks/switchwebdb.sh rts2',
         depends_on_past=1,
-        dag = dag))
+        dag = dag)
 
 task7_swap_web_db_rts2.set_upstream(task5_sum_batch_rts2)
 
@@ -152,7 +152,7 @@ task15_swap_web_db_rts1 =  BashOperator(
         task_id = '15_web_rts1',
         bash_command='bash tasks/switchwebdb.sh rts1',
         depends_on_past=1,
-        dag = dag))
+        dag = dag)
 
 task15_swap_web_db_rts1.set_upstream(task13_sum_batch_rts1)
 
