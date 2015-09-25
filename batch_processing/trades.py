@@ -20,12 +20,13 @@ df_cassandra = df_stockcount.join(df_totalportfolio, df_stockcount.stockcount_us
 
 #for each row in df_stockcount, calculate a ratio of stock count of user and company by total portfolio by user
 #hard code contact limit to 10% as default
-rdd_cassandra = df_cassandra.map(lambda r: {"user": str(r.stockcount_user), 
+rdd_stockcounts = df_cassandra.map(lambda r: {"user": str(r.stockcount_user), 
     "company": r.company,
     "stock_total": r.stock_total,
-    "portfolio_total": r.portfolio_total,
     "portfolio_ratio": abs(r.stock_total) / float(r.portfolio_total),
     "contact_limit": 0.25})
+rdd_totals = df_cassandra.map(lambda r: lambda r: {"user": str(r.stockcount_user), 
+    "portfolio_total": r.portfolio_total})
 
 #save to Cassandra
 def AddToCassandra_stockcountsbatch_bypartition(d_iter):
@@ -36,10 +37,9 @@ def AddToCassandra_stockcountsbatch_bypartition(d_iter):
     
     class stock_counts_batch(Model):
         user = columns.Text(primary_key=True)
-        company = columns.Text()
+        company = columns.Text(primary_key=True)
         stock_total = columns.Integer()
-        portfolio_total = columns.Integer()
-        portfolio_ratio = columns.Float(primary_key=True)
+        portfolio_ratio = columns.Float()
         contact_limit = columns.Float()
         
     host="ec2-54-215-237-86.us-west-1.compute.amazonaws.com" #cassandra seed node, TODO: do not hard code this
@@ -50,3 +50,22 @@ def AddToCassandra_stockcountsbatch_bypartition(d_iter):
 
 AddToCassandra_stockcountsbatch_bypartition([])
 rdd_cassandra.foreachPartition(AddToCassandra_stockcountsbatch_bypartition)
+
+def AddToCassandra_stocktotalsbatch_bypartition(d_iter):
+    from cqlengine import columns
+    from cqlengine.models import Model
+    from cqlengine import connection
+    from cqlengine.management import sync_table
+    
+    class stock_totals_batch(Model):
+        user = columns.Text(primary_key=True)
+        portfolio_total = columns.Integer()
+        
+    host="ec2-54-215-237-86.us-west-1.compute.amazonaws.com" #cassandra seed node, TODO: do not hard code this
+    connection.setup([host], "finance_news")
+    sync_table(stock_totals_batch)
+    for d in d_iter:
+        stock_totals_batch.create(**d)
+
+AddToCassandra_stocktotalsbatch_bypartition([])
+rdd_cassandra.foreachPartition(AddToCassandra_stocktotalsbatch_bypartition)
