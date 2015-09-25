@@ -1,6 +1,7 @@
 from pyspark import SparkContext
 from pyspark import StorageLevel
 from pyspark.sql import SQLContext
+from pyspark.sql import StructType, StructField
 from cqlengine import connection
 from cqlengine.connection import get_session
 
