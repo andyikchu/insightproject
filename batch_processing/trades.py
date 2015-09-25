@@ -49,7 +49,7 @@ def AddToCassandra_stockcountsbatch_bypartition(d_iter):
         stock_counts_batch.create(**d)
 
 AddToCassandra_stockcountsbatch_bypartition([])
-rdd_cassandra.foreachPartition(AddToCassandra_stockcountsbatch_bypartition)
+rdd_stockcounts.foreachPartition(AddToCassandra_stockcountsbatch_bypartition)
 
 def AddToCassandra_stocktotalsbatch_bypartition(d_iter):
     from cqlengine import columns
@@ -68,4 +68,4 @@ def AddToCassandra_stocktotalsbatch_bypartition(d_iter):
         stock_totals_batch.create(**d)
 
 AddToCassandra_stocktotalsbatch_bypartition([])
-rdd_cassandra.foreachPartition(AddToCassandra_stocktotalsbatch_bypartition)
+rdd_totals.foreachPartition(AddToCassandra_stocktotalsbatch_bypartition)
