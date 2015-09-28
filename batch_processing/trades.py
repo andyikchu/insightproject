@@ -31,7 +31,7 @@ df_cassandra = df_stockcount.join(df_totalportfolio, df_stockcount.stockcount_us
 rdd_stockcounts = df_cassandra.map(lambda r: {"user": str(r.stockcount_user), 
     "company": r.company,
     "stock_total": r.stock_total,
-    "portfolio_ratio": abs(r.stock_total) / float(r.portfolio_total),
+    "portfolio_ratio": 0 if r.stock_total == 0 and r.portfolio_total ==0 else abs(r.stock_total) / float(r.portfolio_total),
     "contact_limit": 0.25})
 rdd_stockcounts = rdd_stockcounts.repartition(20)
 rdd_stockcounts.persist(StorageLevel.MEMORY_AND_DISK_SER)
