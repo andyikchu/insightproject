@@ -12,7 +12,9 @@ json_format = [StructField("user", StringType(), True),
         StructField("company", StringType(), True),
         StructField("numstock", IntegerType(), True),
         StructField("timestamp", StringType(), True)]
-df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*", StructType(json_format))
+#df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*", StructType(json_format))
+#use smaller dataset for test
+df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/hourly/2015/09/19/20/trades.0.1.421565.421565.1442718000000.gz", StructType(json_format))
 
 #calculate current stock count holdings for each user and company
 df.registerTempTable("trade_history")
@@ -35,6 +37,9 @@ rdd_stockcounts.persist(StorageLevel.MEMORY_AND_DISK_SER)
 rdd_totals = df_cassandra.map(lambda r: lambda r: {"user": str(r.stockcount_user), 
     "portfolio_total": r.portfolio_total})
 rdd_totals.persist(StorageLevel.MEMORY_AND_DISK_SER)
+
+print rdd_stockcounts.getNumPartitions()
+print rdd_totals.getNumPartitions()
 
 #save to Cassandra
 def AddToCassandra_stockcountsbatch_bypartition(d_iter):
