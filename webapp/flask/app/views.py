@@ -1,3 +1,4 @@
+from flask import render_template
 from flask import jsonify 
 from app import app
 from cassandra.cluster import Cluster
@@ -26,3 +27,5 @@ def get_trade_summary(user):
     jsonresponse = [{"user": user, "company": company, "stock_total": stock_total, "portfolio_ratio": portfolio_ratio, "contact_limit": contact_limit for row in stock_counts]
     return jsonify(tradesummary=jsonresponse)
 
+def index():
+    return render_template("index.html", title = 'Home', user = user)
