@@ -3,7 +3,7 @@ from app import app
 from cassandra.cluster import Cluster
 
 #connect to cassandra
-cluster = Cluster(["ec2-54-67-33-180.us-west-1.compute.amazonaws.com"])
+cluster = Cluster(["ec2-54-215-237-86.us-west-1.compute.amazonaws.com"])
 session = cluster.connect("finance_news")
 
 @app.route('/')
@@ -15,24 +15,14 @@ def index():
 @app.route('/tradesummary/<user>')
 
 def get_trade_summary(user):
-    portfolio = {}
-    portfolio_total = 0
-    contact_limit = 0
+    #check which database to query
+    dbfile = open("/home/ubuntu/.insightproject/cassandra.txt")
+    db = dbfile.readline().rstrip()
+    dbfile.close()
 
-    #TODO: fix logic in calculating total counts
-    stmt = "SELECT company, stock_total, contact_limit FROM stock_counts WHERE user=%s"
-    stock_counts = session.execute(stmt, parameters=[user])
-    for c in stock_counts:
-        portfolio[c.company] = c.stock_total
-        contact_limit = c.contact_limit
-
-    stmt = "SELECT company, numstock FROM trade_history WHERE user=%s"
-    new_trades = session.execute(stmt, parameters=[user])
-    for n in new_trades:
-        portfolio[n.company] += n.stock_total
-    
-    for company in portfolio:
-        portfolio_total += portfolio[company]
+    stmt = "SELECT user, company, stock_total, portfolio_ratio, contact_limit FROM stock_counts_" + db + " WHERE user=%s"
+    stock_counts = session.execute(stmt, parameters=[user]
      
-    jsonresponse = [{"user": user, "company": company, "stock_total": portfolio[company], "portfolio_total": portfolio_total, "contact_limit": contact_limit, "portfolio_ratio": portfolio[company]/portfolio_total} for company in portfolio]
+    jsonresponse = [{"user": user, "company": company, "stock_total": stock_total, "portfolio_ratio": portfolio_ratio, "contact_limit": contact_limit for row in stock_counts]
     return jsonify(tradesummary=jsonresponse)
+
