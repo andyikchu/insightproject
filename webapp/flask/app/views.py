@@ -11,7 +11,7 @@ session = cluster.connect("finance_news")
 @app.route('/index')
 
 def index():
-    return "Financial Updates"
+    return render_template("index.html", user = "1")
 
 @app.route('/tradesummary/<user>')
 
@@ -26,6 +26,3 @@ def get_trade_summary(user):
      
     jsonresponse = [{"user": user, "company": company, "stock_total": stock_total, "portfolio_ratio": portfolio_ratio, "contact_limit": contact_limit} for row in stock_counts]
     return jsonify(tradesummary=jsonresponse)
-
-def index():
-    return render_template("index.html", user = "1")
