@@ -17,7 +17,7 @@ default_args = {
 }
 
 dag = DAG(
-    'test', default_args=default_args, schedule_interval=timedelta(1))
+    'financial_news', default_args=default_args, schedule_interval=timedelta(1))
 
 #Run Camus to pull messages from Kafka into HDFS
 camus_a = BashOperator(
