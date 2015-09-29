@@ -28,4 +28,4 @@ def get_trade_summary(user):
     return jsonify(tradesummary=jsonresponse)
 
 def index():
-    return render_template("index.html", title = 'Home', user = user)
+    return render_template("index.html", user = "1")
