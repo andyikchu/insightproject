@@ -24,6 +24,7 @@ consumer = KafkaConsumer('twitter',
                         "twitter_stream",
                         bootstrap_servers=['ec2-54-215-247-116.us-west-1.compute.amazonaws.com']) #TODO: do not hardcode this, use multiple addresses
 
+news.ttl(7776000) #let news live for 90 days in the database
 for message in consumer:
     j = json.loads(message.value)
     news.create(company = j["company"].replace('$', ''), summary = j["summary"], newstime = datetime.strptime(j["newstime"], "%a %b %d %H:%M:%S %Y").strftime("%Y-%m-%d %H:%M:%S"), author = j["author"], newsoutlet = j["newsoutlet"], source = j["source"])
