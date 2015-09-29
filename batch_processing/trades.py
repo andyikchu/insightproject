@@ -22,7 +22,8 @@ df_stockcount = sqlContext.sql("SELECT user AS stockcount_user, company, SUM(num
 df_stockcount.registerTempTable("stockcount")
 df_totalportfolio = sqlContext.sql("SELECT stockcount_user AS totalportfolio_user, SUM(ABS(stock_total)) AS portfolio_total FROM stockcount GROUP BY stockcount_user")
 
-df_cassandra = df_stockcount.join(df_totalportfolio, df_stockcount.stockcount_user == df_totalportfolio.totalportfolio_user)
+df_totalportfolio.registerTempTable("totalportfolio")
+df_cassandra = sqlContext.sql("SELECT s.stockcount_user, s.company, s.stock_total, p.portfolio_total FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.totalportfolio_user")
 
 #for each row in df_stockcount, calculate a ratio of stock count of user and company by total portfolio by user
 #hard code contact limit to 10% as default
