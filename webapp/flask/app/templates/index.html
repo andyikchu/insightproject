@@ -1,23 +1,17 @@
 <html>
 <head>
-<title>Autonews Financial - Welcome User {{user}}</title>
+<title>Autonews Financial</title>
 </head>
 <body>
-<h1>Hello, {{user}}!</h1>
-<table>
-	<tr>
-		<td>
-			<h2>Your Latest Trades</h2>
-		</td>
-		<td>
-			<h2>Your Portfolio</h2>
-		</td>
-	</tr>
-	<tr>
-		<td span=2>
-			<h2>Your News Updates</h2>
-		</td>
-	</tr>
-</table>
+<div style="font-size:7em"; align="center">Autonews<br>Financial</div>
+<div style="font-size:3em"; align="center">Real-time news summaries customized to your portfolio as you trade</div>
+<div align="center">
+	<form action="user" method="get">
+	Log in with your user id
+		<input type="text" name="user"></input>
+		<input type="submit" value="Log in"></input>
+	</form>
+	</p>
+</div>
 </body>
 </html>
