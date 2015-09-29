@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from flask import jsonify 
 from app import app
 from cassandra.cluster import Cluster
@@ -9,12 +9,15 @@ session = cluster.connect("finance_news")
 
 @app.route('/')
 @app.route('/index')
-
 def index():
-    return render_template("index.html", user = "1")
+    return render_template("index.html")
+
+@app.route('/user')
+def get_user():
+    user=request.args.get("user")
+    return render_template("user.html", user="2")
 
 @app.route('/tradesummary/<user>')
-
 def get_trade_summary(user):
     #check which database to query
     dbfile = open("/home/ubuntu/.insightproject/cassandra.txt")
