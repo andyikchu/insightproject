@@ -13,6 +13,7 @@ from datetime import datetime
 import json
 
 sc = SparkContext(appName="Finance News, Stream Trades") 
+sc.setLocalProperty("spark.cores.max", "4")
 ssc = StreamingContext(sc, 1)
 
 def getSqlContextInstance(sparkContext):
