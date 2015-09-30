@@ -14,7 +14,7 @@ from cqlengine.management import sync_table
 from datetime import datetime
 import json
 
-conf = SparkConf().setAppName("Finance News, Stream Trades").set("spark.cores.max", "2")
+conf = SparkConf().setAppName("Finance News, Stream Twitter").set("spark.cores.max", "2")
 sc = SparkContext(conf=conf)
 ssc = StreamingContext(sc, 1)
 
