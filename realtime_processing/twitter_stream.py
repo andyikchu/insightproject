@@ -40,3 +40,7 @@ def process(rdd):
     df_news = sqlContext.createDataFrame(rowRdd)
     for row in df_news.collect():
         session.execute(st_news, (row.company, row.summary, row.newstime, row.author, row.newsoutlet, row.source, ))
+
+lines.foreachRDD(process)
+ssc.start()
+ssc.awaitTermination()
