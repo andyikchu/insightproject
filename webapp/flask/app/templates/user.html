@@ -15,9 +15,15 @@
 	</tr>
 	<tr>
 		<td>
-			{% for row in latest_trades %}
-			<li>{{ row.company }} {{ row.num_stock }} {{ row.tradetime }}</li>
-			{% endfor %}
+			<table>
+				{% for row in latest_trades %}
+				<tr>
+					<td>{{ row.company }}</td>
+					<td>{{ row.num_stock }}</td>
+					<td>{{ row.tradetime }}</td>
+				{% endfor %}
+				</tr>
+			</table>
 		</td>
 		<td></td>
 	</tr>
@@ -26,6 +32,15 @@
 			<h2>Your News Updates</h2>
 		</td>
 	</tr>
+	{% for row in latest_news %}
+	<tr>
+		<td span=2>{{ row.company }}</td>
+		<td span=2>{{ row.summary }}</td>
+		<td span=2>{{ row.source }}</td>
+		<td span=2>{{ row.newsoutlet }}</td>
+		<td span=2>{{ row.time }}</td>
+	</tr>
+	{% endfor %}
 </table>
 </body>
 </html>

@@ -25,8 +25,16 @@ def get_user():
 
     #TODO, feed in ','.join(COMPANIES) as parameter instead of messy string
     latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime LIMIT 5", parameters=[user])
+    current_portfolio = "..."
 
-    return render_template("user.html", user=user, latest_trades = latest_trades)
+    user_companies = session.execute("SELECT company, portfolio_ratio, contact_limit FROM stock_counts_" + db + " WHERE user=%s", parameters=[user])
+    user_companies_list = []
+    for row in user_companies:
+        if row.portfolio_ratio > row.contact_limit:
+            user_companies_list.append([row.company])
+    latest_news = session.execute("SELECT company, summary, newsoutlet, source, author FROM stock_counts_" + db + " WHERE company IN ('" + "','".join(user_companies) +"') ORDER BY newstime DESC")
+
+    return render_template("user.html", user=user, latest_trades = latest_trades, latest_news = latest_news)
 
 @app.route('/tradesummary/<user>')
 def get_trade_summary(user):
