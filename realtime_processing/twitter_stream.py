@@ -36,7 +36,7 @@ def process(rdd):
         newsoutlet=json.loads(w)["newsoutlet"],
         author=json.loads(w)["author"],
         company=json.loads(w)["company"].replace('$', ''),
-        newstime=datetime.strptime(json.loads(w)["newstime"], "%a %b %d %H:%M:%S %Y").strftime("%Y-%m-%d %H:%M:%S") ))
+        newstime=datetime.strptime(json.loads(w)["newstime"].encode('utf-8'), "%a %b %d %H:%M:%S %Y")))
     df_news = sqlContext.createDataFrame(rowRdd)
     for row in df_news.collect():
         session.execute(st_news, (row.company, row.summary, row.newstime, row.author, row.newsoutlet, row.source, ))
