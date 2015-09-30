@@ -1,4 +1,4 @@
-rom pyspark import SparkContext
+from pyspark import SparkContext
 from pyspark import StorageLevel
 from pyspark.sql import SQLContext
 from pyspark.sql.types import *
