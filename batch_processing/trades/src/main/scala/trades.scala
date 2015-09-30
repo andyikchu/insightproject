@@ -23,7 +23,7 @@ object trades_batch {
 		val totalportfolio = sqlContext.sql("SELECT stockcount_user AS user, SUM(ABS(stock_total)) AS portfolio_total FROM stockcount GROUP BY stockcount_user")
 		totalportfolio.registerTempTable("totalportfolio")
 
-		val stock_counts_batch = sqlContext.sql("SELECT s.stockcount_user AS user, s.company, 0.10 AS contact_limit, s.stock_total, CASE s.stock_total WHEN 0 THEN 0 ELSE s.stock_total/p.portfolio_total END AS portfolio_ratio FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.totalportfolio_user")
+		val stock_counts_batch = sqlContext.sql("SELECT s.stockcount_user AS user, s.company, 0.10 AS contact_limit, s.stock_total, CASE s.stock_total WHEN 0 THEN 0 ELSE s.stock_total/p.portfolio_total END AS portfolio_ratio FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.user")
 		
 		stock_counts_batch.rdd.saveToCassandra("finance_news", "stock_counts_batch")
 		totalportfolio.rdd.saveToCassandra("finance_news", "stock_totals_batch")
