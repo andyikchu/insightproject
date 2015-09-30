@@ -1,11 +1,13 @@
 from pyspark import SparkContext
+from pyspark import SparkConf
 from pyspark import StorageLevel
 from pyspark.sql import SQLContext
 from pyspark.sql.types import *
 from cqlengine import connection
 from cqlengine.connection import get_session
 
-sc = SparkContext(appName="Finance News, Batch Trades") 
+conf = SparkConf().setAppName("Finance News, Stream Trades").set("spark.cores.max", "120")
+sc = SparkContext(conf=conf) 
 sqlContext = SQLContext(sc) 
 
 json_format = [StructField("user", StringType(), True),
