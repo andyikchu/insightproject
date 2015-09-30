@@ -3,7 +3,7 @@
 <title>Autonews Financial - Welcome User {{user}}</title>
 </head>
 <body>
-<h1>Hello, User {{user}}!</h1>
+<h1>Hello, User {{user}}</h1>
 <table>
 	<tr>
 		<td>
@@ -12,6 +12,14 @@
 		<td>
 			<h2>Your Portfolio</h2>
 		</td>
+	</tr>
+	<tr>
+		<td>
+			{% for row in latest_trades %}
+			<li>{{ row.company }} {{ row.numstock } {{ row.tradetime }}}</li>
+			{% endfor %}
+		</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td span=2>
