@@ -9,6 +9,7 @@ from cqlengine import connection
 from cqlengine import columns
 from cqlengine.models import Model
 from cqlengine.management import sync_table
+from datetime import datetime
 import json
 
 sc = SparkContext(appName="Finance News, Stream Trades") 
@@ -102,10 +103,14 @@ def process(rdd):
     rowRdd = rdd.map(lambda w: Row(user=str(json.loads(w)["user"]), company=json.loads(w)["company"], numstock=json.loads(w)["numstock"] ,timestamp=json.loads(w)["timestamp"] ))
     df_trades = sqlContext.createDataFrame(rowRdd)
     for row in df_trades.collect():
+        tradetime = row.timestamp.encode('utf-8')
+        if len(tradetime) == 0:
+            continue
+        tradetime = datetime.strptime(tradetime, "%Y-%m-%d %H:%M:%S%z")
         user = row.user
         company = row.company
         tradeamount = row.numstock
-        session.execute(st_tradehistory, (user, company, row.timestamp, tradeamount, ))
+        session.execute(st_tradehistory, (user, company, tradetime, tradeamount, ))
         #get current value from each stream DB
         rts1_stocks = session.execute(st_getcount_rts1, (user, company, ))
         rts2_stocks = session.execute(st_getcount_rts2, (user, company, ))
@@ -119,7 +124,6 @@ def process(rdd):
         rts2_total = 0 if len(rts2_totals) == 0 else rts2_totals[0].portfolio_total
         rts1_contact = .25 if len(rts1_stocks) == 0 else rts1_stocks[0].contact_limit
         rts2_contact = .25 if len(rts2_stocks) == 0 else rts2_stocks[0].contact_limit
-
         rts1_total = calculate_portfolio_total(rts1_stock, rts1_total, tradeamount)
         rts2_total = calculate_portfolio_total(rts2_stock, rts2_total, tradeamount)
         rts1_stock += tradeamount
@@ -133,7 +137,6 @@ def process(rdd):
             rts2_ratio = 0
         else:
             rts2_ratio = abs(rts2_stock)/float(rts2_total)
-
         session.execute(st_setcount_rts1,(user, company, rts1_stock, rts1_ratio, rts1_contact,))
         session.execute(st_setcount_rts2,(user, company, rts2_stock, rts2_ratio, rts2_contact,))
         session.execute(st_settotal_rts1,(user, rts1_total,))
