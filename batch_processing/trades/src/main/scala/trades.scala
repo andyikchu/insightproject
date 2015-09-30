@@ -3,7 +3,6 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.DataFrame
-import sqlContext.implicits._
 import play.api.libs.json._
 
 import com.datastax.spark.connector._ 
@@ -24,7 +23,7 @@ object trade_batch {
 		totalportfolio.registerTempTable("totalportfolio")
 		val output = sqlContext.sql("SELECT s.stockcount_user AS user, s.company, 0.10 AS contact_limit, s.stock_total, CASE s.stock_total WHEN 0 THEN 0 ELSE s.stock_total/p.portfolio_total END AS portfolio_ratio, p.portfolio_total FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.totalportfolio_user")
 		
-		output.saveToCassandra("finance_news", "stock_counts_batch", SomeColumns("user", "company", "stock_total", "portfolio_ratio", "contact_limit"))
+		output.rdd.saveToCassandra("finance_news", "stock_counts_batch", SomeColumns("user", "company", "stock_total", "portfolio_ratio", "contact_limit"))
 		output.saveToCassandra("finance_news", "stock_totals_batch", SomeColumns("user", "portfolio_total"))
 	}
 }
