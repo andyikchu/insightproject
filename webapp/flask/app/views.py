@@ -23,7 +23,7 @@ def get_user():
     db = dbfile.readline().rstrip()
     dbfile.close()
 
-    latest_trades = session.execute("SELECT company, numstock, tradetime FROM trade_history WHERE user=%s AND company IN (%s) ORDER BY tradetime LIMIT 5", parameters=[user, ','.join(COMPANIES)])
+    latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN (%s) ORDER BY tradetime LIMIT 5", parameters=[user, ','.join(COMPANIES)])
 
     return render_template("user.html", user=user, latest_trades = latest_trades)
 
