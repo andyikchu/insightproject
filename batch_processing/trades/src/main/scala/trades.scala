@@ -3,6 +3,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.DataFrame
+import sqlContext.implicits._
 import play.api.libs.json._
 
 import com.datastax.spark.connector._ 
@@ -12,7 +13,7 @@ object trade_batch {
 	def main(args: Array[String]) {
 		val sparkConf = new SparkConf().setAppName("Finance News, Batch Trades").set("spark.cassandra.connection.host", "ec2-54-215-237-86.us-west-1.compute.amazonaws.com")
 		val sc = new SparkContext(sparkConf)
-		val sqlContext = SQLContextSingleton.getInstance(sc)
+		val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 		val tradehistory = sqlContext.jsonFile("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*")
 		
 		//Sum stock and portfolio counts per user and company
