@@ -24,6 +24,6 @@ object trade_batch {
 		val output = sqlContext.sql("SELECT s.stockcount_user AS user, s.company, 0.10 AS contact_limit, s.stock_total, CASE s.stock_total WHEN 0 THEN 0 ELSE s.stock_total/p.portfolio_total END AS portfolio_ratio, p.portfolio_total FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.totalportfolio_user")
 		
 		output.rdd.saveToCassandra("finance_news", "stock_counts_batch", SomeColumns("user", "company", "stock_total", "portfolio_ratio", "contact_limit"))
-		output.saveToCassandra("finance_news", "stock_totals_batch", SomeColumns("user", "portfolio_total"))
+		output.rdd.saveToCassandra("finance_news", "stock_totals_batch", SomeColumns("user", "portfolio_total"))
 	}
 }
