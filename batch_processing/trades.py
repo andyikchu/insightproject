@@ -1,11 +1,9 @@
-from pyspark import SparkContext
+rom pyspark import SparkContext
 from pyspark import StorageLevel
 from pyspark.sql import SQLContext
 from pyspark.sql.types import *
 from cqlengine import connection
 from cqlengine.connection import get_session
-
-from cassandra.cluster import Cluster
 
 sc = SparkContext(appName="Finance News, Batch Trades") 
 sqlContext = SQLContext(sc) 
@@ -34,18 +32,49 @@ rdd_stockcounts = df_cassandra.map(lambda r: {"user": str(r.stockcount_user),
     "stock_total": r.stock_total,
     "portfolio_ratio": 0 if r.stock_total == 0 and r.portfolio_total == 0 else abs(r.stock_total) / float(r.portfolio_total),
     "contact_limit": 0.10})
+rdd_stockcounts.persist(StorageLevel.MEMORY_AND_DISK_SER)
 rdd_totals = df_cassandra.map(lambda r: {"user": str(r.stockcount_user), 
     "portfolio_total": r.portfolio_total})
+rdd_totals.persist(StorageLevel.MEMORY_AND_DISK_SER)
 
-# connect to cassandra
-cluster = Cluster(['ec2-54-215-237-86.us-west-1.compute.amazonaws.com'])
-session = cluster.connect("finance_news") 
+#save to Cassandra
+def AddToCassandra_stockcountsbatch_bypartition(d_iter):
+    from cqlengine import columns
+    from cqlengine.models import Model
+    from cqlengine import connection
+    from cqlengine.management import sync_table
+    
+    class stock_counts_batch(Model):
+        user = columns.Text(primary_key=True)
+        company = columns.Text(primary_key=True)
+        stock_total = columns.Integer()
+        portfolio_ratio = columns.Float()
+        contact_limit = columns.Float()
+        
+    host="ec2-54-215-237-86.us-west-1.compute.amazonaws.com" #cassandra seed node, TODO: do not hard code this
+    connection.setup([host], "finance_news")
+    sync_table(stock_counts_batch)
+    for d in d_iter:
+        stock_counts_batch.create(**d)
 
-insert_stock_count = session.prepare("INSERT INTO stock_counts_batch (user, company, stock_total, portfolio_ratio, contact_limit) VALUES (?,?,?,?,?)")
-insert_portfolio_total = session.prepare("INSERT INTO stock_totals_batch (user, portfolio_total) VALUES (?,?)")
+AddToCassandra_stockcountsbatch_bypartition([])
+rdd_stockcounts.foreachPartition(AddToCassandra_stockcountsbatch_bypartition)
 
-for row in rdd_stockcounts:
-    session.execute(insert_stock_count,(row.user,row.company,row.stock_total,row.portfolio_ratio,row.contact_limit,))
+def AddToCassandra_stocktotalsbatch_bypartition(d_iter):
+    from cqlengine import columns
+    from cqlengine.models import Model
+    from cqlengine import connection
+    from cqlengine.management import sync_table
+    
+    class stock_totals_batch(Model):
+        user = columns.Text(primary_key=True)
+        portfolio_total = columns.Integer()
+        
+    host="ec2-54-215-237-86.us-west-1.compute.amazonaws.com" #cassandra seed node, TODO: do not hard code this
+    connection.setup([host], "finance_news")
+    sync_table(stock_totals_batch)
+    for d in d_iter:
+        stock_totals_batch.create(**d)
 
-for row in rdd_totals:
-    session.execute(insert_portfolio_total,(row.user,row.portfolio_total,))
+AddToCassandra_stocktotalsbatch_bypartition([])
+rdd_totals.foreachPartition(AddToCassandra_stocktotalsbatch_bypartition)
