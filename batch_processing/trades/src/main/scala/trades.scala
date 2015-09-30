@@ -3,6 +3,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.DataFrame
+
 import play.api.libs.json._
 
 import com.datastax.spark.connector._ 
@@ -19,11 +20,19 @@ object trades_batch {
 		tradehistory.registerTempTable("tradehistory")
 		val stockcount = sqlContext.sql("SELECT user AS stockcount_user, company, SUM(numstock) AS stock_total FROM tradehistory WHERE timestamp IS NOT NULL GROUP BY user, company")
 		stockcount.registerTempTable("stockcount")
-		val totalportfolio = sqlContext.sql("SELECT stockcount_user AS totalportfolio_user, SUM(ABS(stock_total)) AS portfolio_total FROM stockcount GROUP BY stockcount_user")
+		val totalportfolio = sqlContext.sql("SELECT stockcount_user AS user, SUM(ABS(stock_total)) AS portfolio_total FROM stockcount GROUP BY stockcount_user")
 		totalportfolio.registerTempTable("totalportfolio")
-		val output = sqlContext.sql("SELECT s.stockcount_user AS user, s.company, 0.10 AS contact_limit, s.stock_total, CASE s.stock_total WHEN 0 THEN 0 ELSE s.stock_total/p.portfolio_total END AS portfolio_ratio, p.portfolio_total FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.totalportfolio_user")
+
+		val stock_counts_batch = sqlContext.sql("SELECT s.stockcount_user AS user, s.company, 0.10 AS contact_limit, s.stock_total, CASE s.stock_total WHEN 0 THEN 0 ELSE s.stock_total/p.portfolio_total END AS portfolio_ratio FROM stockcount s JOIN totalportfolio p ON s.stockcount_user = p.user")
 		
-		output.rdd.saveToCassandra("finance_news", "stock_counts_batch", SomeColumns("user", "company", "stock_total", "portfolio_ratio", "contact_limit"))
-		output.rdd.saveToCassandra("finance_news", "stock_totals_batch", SomeColumns("user", "portfolio_total"))
+		stock_counts_batch.write
+			.format("org.apache.spark.sql.cassandra")
+			.options(Map( "table" -> "stock_counts_batch", "keyspace" -> "finance_news"))
+			.save()
+
+		totalportfolio.write
+			.format("org.apache.spark.sql.cassandra")
+			.options(Map( "table" -> "stock_counts_batch", "keyspace" -> "finance_news"))
+			.save()
 	}
 }
