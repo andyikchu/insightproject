@@ -8,7 +8,7 @@ import play.api.libs.json._
 import com.datastax.spark.connector._ 
 import com.datastax.driver.core.utils._
 
-object trade_batch {
+object trades_batch {
 	def main(args: Array[String]) {
 		val sparkConf = new SparkConf().setAppName("Finance News, Batch Trades").set("spark.cassandra.connection.host", "ec2-54-215-237-86.us-west-1.compute.amazonaws.com")
 		val sc = new SparkContext(sparkConf)
