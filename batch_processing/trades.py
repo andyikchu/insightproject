@@ -6,7 +6,7 @@ from pyspark.sql.types import *
 from cqlengine import connection
 from cqlengine.connection import get_session
 
-conf = SparkConf().setAppName("Finance News, Stream Trades").set("spark.cores.max", "120")
+conf = SparkConf().setAppName("Finance News, Batch Trades").set("spark.cores.max", "120")
 sc = SparkContext(conf=conf) 
 sqlContext = SQLContext(sc) 
 
