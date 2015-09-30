@@ -106,7 +106,7 @@ def process(rdd):
         tradetime = row.timestamp.encode('utf-8')
         if len(tradetime) == 0:
             continue
-        tradetime = datetime.strptime(tradetime, "%Y-%m-%d %H:%M:%S%z")
+        tradetime = datetime.strptime(tradetime, "%Y-%m-%d %H:%M:%S")
         user = row.user
         company = row.company
         tradeamount = row.numstock
