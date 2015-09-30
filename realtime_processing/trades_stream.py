@@ -1,4 +1,5 @@
 from pyspark import SparkContext
+from pyspark import SparkConf
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 from pyspark.sql import SQLContext, Row
@@ -12,8 +13,8 @@ from cqlengine.management import sync_table
 from datetime import datetime
 import json
 
-sc = SparkContext(appName="Finance News, Stream Trades") 
-sc.setLocalProperty("spark.cores.max", "4")
+conf = SparkConf().setAppName("Finance News, Stream Trades").set("spark.cores.max", "12")
+sc = SparkContext(conf=conf) 
 ssc = StreamingContext(sc, 1)
 
 def getSqlContextInstance(sparkContext):
