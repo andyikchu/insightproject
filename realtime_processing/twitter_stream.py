@@ -14,6 +14,7 @@ from datetime import datetime
 import json
 
 sc = SparkContext(appName="Finance News, Stream Twitter") 
+sc.set("spark.cores.max", "2")
 ssc = StreamingContext(sc, 1)
 
 def getSqlContextInstance(sparkContext):
