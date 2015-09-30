@@ -98,7 +98,7 @@ st_setcount_rts1 = makest_setcount("stock_counts_rts1")
 st_setcount_rts2 = makest_setcount("stock_counts_rts2")
 st_settotal_rts1 = makest_settotal("stock_totals_rts1")
 st_settotal_rts2 = makest_settotal("stock_totals_rts2")
-st_tradehistory = session.prepare("INSERT INTO trade_history (user, company, tradetime, num_stock) VALUES (?,?,?,?) USING TTL 6000") #let trade history live for 100 minutes in the database
+st_tradehistory = session.prepare("INSERT INTO trade_history (user, company, tradetime, num_stock) VALUES (?,?,?,?) USING TTL 1296000") #let trade history live for 15 days in the database
 
 def process(rdd):
     sqlContext = getSqlContextInstance(rdd.context)
