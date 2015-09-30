@@ -24,6 +24,7 @@ def get_user():
     dbfile.close()
 
     #TODO, feed in ','.join(COMPANIES) as parameter instead of messy string
+    #TODO: set cassandra paging to off
     latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime LIMIT 5", parameters=[user])
     current_portfolio = "..."
 
@@ -33,7 +34,7 @@ def get_user():
         if row.portfolio_ratio > row.contact_limit:
             user_companies_list.append(row.company)
 
-    latest_news = session.execute("SELECT company, summary, newsoutlet, source, author FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC")
+    latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
 
     return render_template("user.html", user=user, latest_trades = latest_trades, latest_news = latest_news)
 
