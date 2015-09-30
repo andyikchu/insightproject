@@ -11,7 +11,7 @@ import com.datastax.driver.core.utils._
 object trade_batch {
 	def main(args: Array[String]) {
 		val sparkConf = new SparkConf().setAppName("Finance News, Batch Trades").set("spark.cassandra.connection.host", "ec2-54-215-237-86.us-west-1.compute.amazonaws.com")
-		val sc = new SparkContext(,sparkConf)
+		val sc = new SparkContext(sparkConf)
 		val sqlContext = SQLContextSingleton.getInstance(sc)
 		val tradehistory = sqlContext.jsonFile("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*")
 		
