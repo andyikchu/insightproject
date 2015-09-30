@@ -3,9 +3,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.DataFrame
+
 import play.api.libs.json._
 
 import com.datastax.spark.connector._ 
+import com.datastax.spark.connector.SomeColumns
 import com.datastax.driver.core.utils._
 
 object trades_batch {
