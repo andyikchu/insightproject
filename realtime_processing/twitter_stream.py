@@ -21,7 +21,7 @@ def getSqlContextInstance(sparkContext):
         globals()['sqlContextSingletonInstance'] = SQLContext(sparkContext)
     return globals()['sqlContextSingletonInstance']
 
-kafkaStream = KafkaUtils.createStream(ssc, "ec2-54-215-247-116.us-west-1.compute.amazonaws.com:2181", "trades_stream", {"trades": 1})
+kafkaStream = KafkaUtils.createStream(ssc, "ec2-54-215-247-116.us-west-1.compute.amazonaws.com:2181", "twitter_stream", {"twitter": 1})
 lines = kafkaStream.map(lambda x: x[1])
 
 # connect to cassandra
