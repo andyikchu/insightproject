@@ -6,6 +6,7 @@ from cassandra.cluster import Cluster
 #connect to cassandra
 cluster = Cluster(["ec2-54-215-237-86.us-west-1.compute.amazonaws.com"])
 session = cluster.connect("finance_news")
+session.default_fetch_size = None #turn off paging to allow IN () ORDER BY queries, since only a few records are SELECTed anyway
 
 @app.route('/')
 @app.route('/index')
