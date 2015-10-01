@@ -124,8 +124,8 @@ def process(rdd):
         rts2_stock = 0 if len(rts2_stocks) == 0 else rts2_stocks[0].stock_total
         rts1_total = 0 if len(rts1_totals) == 0 else rts1_totals[0].portfolio_total
         rts2_total = 0 if len(rts2_totals) == 0 else rts2_totals[0].portfolio_total
-        rts1_contact = .25 if len(rts1_stocks) == 0 else rts1_stocks[0].contact_limit
-        rts2_contact = .25 if len(rts2_stocks) == 0 else rts2_stocks[0].contact_limit
+        rts1_contact = .1 if len(rts1_stocks) == 0 else rts1_stocks[0].contact_limit
+        rts2_contact = .1 if len(rts2_stocks) == 0 else rts2_stocks[0].contact_limit
         rts1_total = calculate_portfolio_total(rts1_stock, rts1_total, tradeamount)
         rts2_total = calculate_portfolio_total(rts2_stock, rts2_total, tradeamount)
         rts1_stock += tradeamount

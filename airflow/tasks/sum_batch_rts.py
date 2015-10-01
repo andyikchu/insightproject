@@ -62,7 +62,7 @@ for users in session.execute("SELECT user, portfolio_total FROM stock_totals_bat
         rts_totals = session.execute(st_gettotal, (user, ))
         rts_stock = 0 if len(rts_stocks) == 0 else rts_stocks[0].stock_total
         rts_total = 0 if len(rts_totals) == 0 else rts_totals[0].portfolio_total
-        rts_contact = .25 if len(rts_stocks) == 0 else rts_stocks[0].contact_limit
+        rts_contact = .1 if len(rts_stocks) == 0 else rts_stocks[0].contact_limit
         #write the sum of the batch and real time stream back to the real time stream table
         rts_stock = rts_stock + row.stock_total
         rts_total = rts_total + batch_portfolio_total
