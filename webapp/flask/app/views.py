@@ -41,6 +41,7 @@ def get_user():
     else:
         portfolio_total = portfolio_total[0].portfolio_total
 
+    user_companies_list = []
     #calculate portfolio ratios and generate list of companies above contact limit
     for row in user_companies:
         row["portfolio_ratio"] = 100*float(row["stock_total"])/portfolio_total
@@ -48,7 +49,6 @@ def get_user():
             user_companies_list.append(row["company"])
 
     user_companies.sort(key = lambda row: row["portfolio_ratio"])
-    user_companies_list = []
 
     latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
 
