@@ -6,10 +6,10 @@
 <h1>Hello, User {{user}}</h1>
 <table>
 	<tr>
-		<td span=3>
-			<h2>Your Latest Trades</h2>
+		<td colspan=3>
+			<h2>Your Recent Trades</h2>
 		</td>
-		<td span=3>
+		<td colspan=3>
 			<h2>Your Portfolio</h2>
 		</td>
 	</tr>
@@ -31,18 +31,20 @@
 		{% endif %}
 	</tr>
 	{% endfor %}
+</table>
+<table>
 	<tr>
-		<td span=2>
+		<td colspan=5>
 			<h2>Your News Updates</h2>
 		</td>
 	</tr>
 	{% for row in latest_news %}
 	<tr>
-		<td span=2>{{ row.company }}</td>
-		<td span=2>{{ row.summary }}</td>
-		<td span=2>{{ row.source }}</td>
-		<td span=2>{{ row.newsoutlet }}</td>
-		<td span=2>{{ row.time }}</td>
+		<td>{{ row.company }}</td>
+		<td>{{ row.summary }}</td>
+		<td>{{ row.source }}</td>
+		<td>{{ row.newsoutlet }}</td>
+		<td>{{ row.newstime }}</td>
 	</tr>
 	{% endfor %}
 </table>
