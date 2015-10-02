@@ -50,7 +50,7 @@ def get_user():
         if row["portfolio_ratio"] > row["contact_limit"]:
             user_companies_list.append(row["company"])
 
-    user_companies.sort(key = lambda row: row["portfolio_ratio"])
+    user_companies.sort(key = lambda row: abs(float(row["portfolio_ratio"])), reverse=True)
 
     latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
 
