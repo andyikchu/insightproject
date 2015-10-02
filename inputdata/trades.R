@@ -6,7 +6,6 @@ numtraders_persec=500000
 
 library(rkafka)
 
-
 generate_trades = function() {
 	#select numtraders_persec from traderIDs
 	trades = data.frame(trader=sample(traderIDs, numtraders_persec))
@@ -27,4 +26,5 @@ generate_trades = function() {
 
 while(1) {
 	generate_trades()
+	sleep(.5)
 }
