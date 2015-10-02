@@ -44,8 +44,9 @@ def get_user():
     user_companies_list = []
     #calculate portfolio ratios and generate list of companies above contact limit
     for row in user_companies:
-        row["portfolio_ratio"] = "%.2f" % (100*float(row["stock_total"])/portfolio_total) + "%"
+        row["portfolio_ratio"] = 100*float(row["stock_total"])/portfolio_total
         row["graphic"] = '|' * abs(int(round(row["portfolio_ratio"])))
+        row["portfolio_ratio"] = "%.2f" % row["portfolio_ratio"]
         if row["portfolio_ratio"] > row["contact_limit"]:
             user_companies_list.append(row["company"])
 
