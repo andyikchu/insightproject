@@ -6,27 +6,31 @@
 <h1>Hello, User {{user}}</h1>
 <table>
 	<tr>
-		<td>
+		<td span=3>
 			<h2>Your Latest Trades</h2>
 		</td>
-		<td>
+		<td span=3>
 			<h2>Your Portfolio</h2>
 		</td>
 	</tr>
+	{% for i in range(5) %}
 	<tr>
-		<td>
-			<table>
-				{% for row in latest_trades %}
-				<tr>
-					<td>{{ row.company }}</td>
-					<td>{{ row.num_stock }}</td>
-					<td>{{ row.tradetime }}</td>
-				{% endfor %}
-				</tr>
-			</table>
-		</td>
-		<td></td>
+		{% if len(latest_trades) >= i %}
+		<td></td><td></td><td></td>
+		{% else %}
+		<td>{{ latest_trades[i].company }}</td>
+		<td>{{ latest_trades[i].num_stock }}</td>
+		<td>{{ latest_trades[i].tradetime }}</td>
+		{% endif %}
+		{% if len(portfolio) >= i %}
+		<td></td><td></td><td></td>
+		{% else %}
+		<td>{{ portfolio[i]["company"] }}</td>
+		<td>{{ '|' * int(round(portfolio[i]["portfolio_ratio"])) }}</td>
+		<td>{{ %.2f" % portfolio[i]["portfolio_ratio"] }}</td>
+		{% endif %}
 	</tr>
+	{% endfor %}
 	<tr>
 		<td span=2>
 			<h2>Your News Updates</h2>
