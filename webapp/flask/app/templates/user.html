@@ -31,10 +31,8 @@
 		{% endif %}
 	</tr>
 	{% endfor %}
-</table>
-<table>
 	<tr>
-		<td colspan=5>
+		<td colspan=6>
 			<h2>Your News Updates</h2>
 		</td>
 	</tr>
@@ -42,9 +40,10 @@
 	<tr>
 		<td>{{ row.company }}</td>
 		<td>{{ row.summary }}</td>
-		<td>{{ row.source }}</td>
+		<td><a href="{{ row.source }}">{{ row.author }}</a></td>
 		<td>{{ row.newsoutlet }}</td>
 		<td>{{ row.newstime }}</td>
+		<td></td>
 	</tr>
 	{% endfor %}
 </table>
