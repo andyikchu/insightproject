@@ -29,7 +29,7 @@ def get_user():
     dbfile.close()
 
     #get data from DB for the user
-    latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime LIMIT 5", parameters=[user])
+    latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime DESC LIMIT 5", parameters=[user])
     #more efficient to calculate portfolio_ratios here than to update all portfolio_ratios for all companies owned by a user during stream calculation
     #TODO: remove portfolio_ratios from cassandra and batch/stream calculations
     user_companies = session.execute("SELECT company, stock_total, contact_limit FROM stock_counts_" + db + " WHERE user=%s", parameters=[user])
@@ -44,7 +44,8 @@ def get_user():
     user_companies_list = []
     #calculate portfolio ratios and generate list of companies above contact limit
     for row in user_companies:
-        row["portfolio_ratio"] = 100*float(row["stock_total"])/portfolio_total
+        row["portfolio_ratio"] = ("%.2f" % 100*float(row["stock_total"])/portfolio_total) + "%"
+        row["graphic"] = '|' * abs(int(round(row["portfolio_ratio"])))
         if row["portfolio_ratio"] > row["contact_limit"]:
             user_companies_list.append(row["company"])
 
