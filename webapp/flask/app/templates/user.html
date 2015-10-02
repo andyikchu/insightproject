@@ -10,35 +10,36 @@
 <table>
 	<tr>
 		<td colspan=3>
-			<h2>Your Recent Trades</h2>
+			<h2>Your Portfolio</h2>
 		</td>
 		<td colspan=3>
-			<h2>Your Portfolio</h2>
+			<h2>Your Recent Trades</h2>
 		</td>
 	</tr>
 	<tr>
-		<td>Stock</td>
-		<td>Trade Time</td>
-		<td>Number of Shares</td>
+
 		<td>Stock</td>
 		<td>Percentage of Portfolio</td>
 		<td></td>
+		<td>Stock</td>
+		<td>Trade Time</td>
+		<td>Number of Shares</td>
 	</tr>
 	{% for i in range(5) %}
 	<tr>
-		{% if i >= latest_trades|length %}
-		<td></td><td></td><td></td>
-		{% else %}
-		<td>{{ latest_trades[i].company }}</td>
-		<td>{{ latest_trades[i].tradetime }}</td>
-		<td>{{ latest_trades[i].num_stock }}</td>
-		{% endif %}
 		{% if i >= portfolio|length %}
 		<td></td><td></td><td></td>
 		{% else %}
 		<td>{{ portfolio[i]["company"] }}</td>
 		<td>{{ portfolio[i]["graphic"] }}</td>
 		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
+		{% endif %}
+		{% if i >= latest_trades|length %}
+		<td></td><td></td><td></td>
+		{% else %}
+		<td>{{ latest_trades[i].company }}</td>
+		<td>{{ latest_trades[i].tradetime }}</td>
+		<td>{{ latest_trades[i].num_stock }}</td>
 		{% endif %}
 	</tr>
 	{% endfor %}
