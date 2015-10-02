@@ -13,14 +13,22 @@
 			<h2>Your Portfolio</h2>
 		</td>
 	</tr>
+	<tr>
+		<td>Stock</td>
+		<td>Trade Time</td>
+		<td>Number of Shares</td>
+		<td>Stock</td>
+		<td>Percentage of Portfolio</td>
+		<td></td>
+	</tr>
 	{% for i in range(5) %}
 	<tr>
 		{% if i >= latest_trades|length %}
 		<td></td><td></td><td></td>
 		{% else %}
 		<td>{{ latest_trades[i].company }}</td>
-		<td>{{ latest_trades[i].num_stock }}</td>
 		<td>{{ latest_trades[i].tradetime }}</td>
+		<td>{{ latest_trades[i].num_stock }}</td>
 		{% endif %}
 		{% if i >= portfolio|length %}
 		<td></td><td></td><td></td>
@@ -35,6 +43,13 @@
 		<td colspan=6>
 			<h2>Your News Updates</h2>
 		</td>
+	</tr>
+	<tr>
+		<td>Stock</td>
+		<td>Summary</td>
+		<td>Source</td>
+		<td>News Outlet</td>
+		<td>Time of Release</td>
 	</tr>
 	{% for row in latest_news %}
 	<tr>
