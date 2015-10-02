@@ -8,27 +8,15 @@ cluster = Cluster(["ec2-54-215-237-86.us-west-1.compute.amazonaws.com"])
 session = cluster.connect("finance_news")
 session.default_fetch_size = None #turn off paging to allow IN () ORDER BY queries, since only a few records are SELECTed anyway
 
-@app.route('/')
-@app.route('/index')
-def index():
-    return render_template("index.html")
-
-@app.route('/slides')
-def slides():
-    return render_template("slides.html")
-
-@app.route('/user')
-def get_user():
-    #temporary hacky method to query for all companies; TODO: redesign cassandra schema or use Presto to do this 
+def get_user_data(user):
+    #pull latest trades, latest news, and portfolio from database for the user
+    #temporary hacky method to query for all companies; TODO: redesign cassandra schema or use Presto(?) to do this 
     COMPANIES = ["MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS"]
-    user=request.args.get("user")
-
     #check which database to query
     dbfile = open("/home/ubuntu/.insightproject/cassandra.txt")
     db = dbfile.readline().rstrip()
     dbfile.close()
-
-    #get data from DB for the user
+    #get a few of the latest trades for the user
     latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime DESC LIMIT 5", parameters=[user])
     #more efficient to calculate portfolio_ratios here than to update all portfolio_ratios for all companies owned by a user during stream calculation
     #TODO: remove portfolio_ratios from cassandra and batch/stream calculations
@@ -51,10 +39,23 @@ def get_user():
             user_companies_list.append(row["company"])
 
     user_companies.sort(key = lambda row: abs(float(row["portfolio_ratio"])), reverse=True)
-
     latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
+    return [latest_trades, user_companies, latest_news]
 
-    return render_template("user.html", user=user, latest_trades = latest_trades, portfolio = user_companies, latest_news = latest_news)
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template("index.html")
+
+@app.route('/slides')
+def slides():
+    return render_template("slides.html")
+
+@app.route('/user')
+def get_user():
+    user=request.args.get("user")
+    latest_trades, portfolio, latest_news = get_user_data(request.args.get("user"))
+    return render_template("user.html", user=user, latest_trades = latest_trades, portfolio = portfolio, latest_news = latest_news)
 
 @app.route('/tradesummary/<user>')
 def get_trade_summary(user):
