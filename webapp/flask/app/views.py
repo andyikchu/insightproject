@@ -24,20 +24,31 @@ def get_user():
     db = dbfile.readline().rstrip()
     dbfile.close()
 
-    #TODO, feed in ','.join(COMPANIES) as parameter instead of messy string
-    #TODO: set cassandra paging to off
+    #get data from DB for the user
     latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime LIMIT 5", parameters=[user])
-    current_portfolio = "..."
+    #more efficient to calculate portfolio_ratios here than to update all portfolio_ratios for all companies owned by a user during stream calculation
+    #TODO: remove portfolio_ratios from cassandra and batch/stream calculations
+    user_companies = session.execute("SELECT company, stock_total, contact_limit FROM stock_counts_" + db + " WHERE user=%s", parameters=[user])
+    user_companies = map(lambda row: dict(zip(["company","stock_total","contact_limit"], row)), user_companies) #map to list of dicts to manage more easily
+    #process companies to calculate total, collect companies above contact ratio
+    portfolio_total = session.execute("SELECT portfolio_total FROM stock_totals_" + db + " WHERE user=%s", parameters=[user])
+    if len(portfolio_total) != 1:
+        portfolio_total = 1
+    else:
+        portfolio_total = portfolio_total[0].portfolio_total
 
-    user_companies = session.execute("SELECT company, portfolio_ratio, contact_limit FROM stock_counts_" + db + " WHERE user=%s", parameters=[user])
-    user_companies_list = []
+    #calculate portfolio ratios and generate list of companies above contact limit
     for row in user_companies:
-        if row.portfolio_ratio > row.contact_limit:
-            user_companies_list.append(row.company)
+        row["portfolio_ratio"] = 100*float(row["stock_total"])/portfolio_total
+        if row["portfolio_ratio"] > row["contact_limit"]:
+            user_companies_list.append(row["company"])
+
+    user_companies.sort(key = lambda row: row["portfolio_ratio"])
+    user_companies_list = []
 
     latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
 
-    return render_template("user.html", user=user, latest_trades = latest_trades, latest_news = latest_news)
+    return render_template("user.html", user=user, latest_trades = latest_trades, portfolio = user_companies, latest_news = latest_news)
 
 @app.route('/tradesummary/<user>')
 def get_trade_summary(user):
