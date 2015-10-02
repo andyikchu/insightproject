@@ -27,7 +27,7 @@
 		{% else %}
 		<td>{{ portfolio[i]["company"] }}</td>
 		<td>{{ '|' * int(round(portfolio[i]["portfolio_ratio"])) }}</td>
-		<td>{{ %.2f" % portfolio[i]["portfolio_ratio"] }}</td>
+		<td>{{ "%.2f" % portfolio[i]["portfolio_ratio"] }}</td>
 		{% endif %}
 	</tr>
 	{% endfor %}
