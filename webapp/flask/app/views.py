@@ -67,5 +67,5 @@ def get_trade_summary(user):
     stmt = "SELECT user, company, stock_total, portfolio_ratio, contact_limit FROM stock_counts_" + db + " WHERE user=%s"
     stock_counts = session.execute(stmt, parameters=[user])
      
-    jsonresponse = [{"user": user, "company": company, "stock_total": stock_total, "portfolio_ratio": portfolio_ratio, "contact_limit": contact_limit} for row in stock_counts]
+    jsonresponse = [{"user": row.user, "company": row.company, "stock_total": row.stock_total, "portfolio_ratio": row.portfolio_ratio, "contact_limit": row.contact_limit} for row in stock_counts]
     return jsonify(tradesummary=jsonresponse)
