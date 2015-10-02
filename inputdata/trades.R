@@ -26,5 +26,5 @@ generate_trades = function() {
 
 while(1) {
 	generate_trades()
-	sleep(.5)
+	Sys.sleep(.5)
 }
