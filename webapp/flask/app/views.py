@@ -52,7 +52,7 @@ def get_user():
 
     latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
 
-    return render_template("user.html", user=user, latest_trades = latest_trades, num_trades = len(latest_trades), portfolio = user_companies, num_companies = len(user_companies), latest_news = latest_news)
+    return render_template("user.html", user=user, latest_trades = latest_trades, portfolio = user_companies, latest_news = latest_news)
 
 @app.route('/tradesummary/<user>')
 def get_trade_summary(user):
