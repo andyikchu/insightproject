@@ -13,6 +13,10 @@ session.default_fetch_size = None #turn off paging to allow IN () ORDER BY queri
 def index():
     return render_template("index.html")
 
+@app.route('/slides')
+def slides():
+    return render_template("slides.html")
+
 @app.route('/user')
 def get_user():
     #temporary hacky method to query for all companies; TODO: redesign cassandra schema or use Presto to do this 
