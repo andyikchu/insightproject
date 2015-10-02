@@ -8,7 +8,7 @@ cluster = Cluster(["ec2-54-215-237-86.us-west-1.compute.amazonaws.com"])
 session = cluster.connect("finance_news")
 session.default_fetch_size = None #turn off paging to allow IN () ORDER BY queries, since only a few records are SELECTed anyway
 
-def get_user_data(user):
+def _get_user_data(user):
     #pull latest trades, latest news, and portfolio from database for the user
     #temporary hacky method to query for all companies; TODO: redesign cassandra schema or use Presto(?) to do this 
     COMPANIES = ["MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS"]
@@ -54,7 +54,7 @@ def slides():
 @app.route('/user')
 def get_user():
     user=request.args.get("user")
-    latest_trades, portfolio, latest_news = get_user_data(request.args.get("user"))
+    latest_trades, portfolio, latest_news = _get_user_data(request.args.get("user"))
     return render_template("user.html", user=user, latest_trades = latest_trades, portfolio = portfolio, latest_news = latest_news)
 
 @app.route('/tradesummary/<user>')
