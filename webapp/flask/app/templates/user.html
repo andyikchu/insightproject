@@ -15,14 +15,14 @@
 	</tr>
 	{% for i in range(5) %}
 	<tr>
-		{% if len(latest_trades) >= i %}
+		{% if num_trades >= i %}
 		<td></td><td></td><td></td>
 		{% else %}
 		<td>{{ latest_trades[i].company }}</td>
 		<td>{{ latest_trades[i].num_stock }}</td>
 		<td>{{ latest_trades[i].tradetime }}</td>
 		{% endif %}
-		{% if len(portfolio) >= i %}
+		{% if num_companies >= i %}
 		<td></td><td></td><td></td>
 		{% else %}
 		<td>{{ portfolio[i]["company"] }}</td>
