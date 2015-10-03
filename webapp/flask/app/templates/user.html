@@ -20,42 +20,45 @@
 <h1>Hello, User {{user}}</h1>
 <table>
 	<tr>
-		<td colspan=3>
+		<td colspan=4>
 			<h2>Your Portfolio</h2>
 		</td>
+	</tr>
+	<tr>
+		<td>Stock</td>
+		<td colspan=2>Percentage of Portfolio</td>
+		<td>Number of Shares</td>
+	</tr>
+	{% for rows in portfolio %}
+	<tr>
+		<td>{{ row["company"] }}</td>
+		<td>{{ row["graphic"] }}</td>
+		<td>{{ row["portfolio_ratio"] }}</td>
+		<td>{{ row["stock_total"] }}</td>
+	</tr>
+	{% endfor %}
+</table>
+<table>
+	<tr>
 		<td colspan=3>
 			<h2>Your Recent Trades</h2>
 		</td>
 	</tr>
 	<tr>
-
-		<td>Stock</td>
-		<td>Percentage of Portfolio</td>
-		<td></td>
 		<td>Stock</td>
 		<td>Trade Time</td>
 		<td>Number of Shares</td>
 	</tr>
-	{% for i in range(5) %}
+	{% for row in latest_trades %}
 	<tr>
-		{% if i >= portfolio|length %}
-		<td></td><td></td><td></td>
-		{% else %}
-		<td>{{ portfolio[i]["company"] }}</td>
-		<td>{{ portfolio[i]["graphic"] }}</td>
-		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
-		{% endif %}
-		{% if i >= latest_trades|length %}
-		<td></td><td></td><td></td>
-		{% else %}
-		<td>{{ latest_trades[i].company }}</td>
-		<td>{{ latest_trades[i].tradetime }}</td>
-		<td>{{ latest_trades[i].num_stock }}</td>
-		{% endif %}
+		<td>{{ row.company }}</td>
+		<td>{{ row.tradetime }}</td>
+		<td>{{ row.num_stock }}</td>
 	</tr>
 	{% endfor %}
+	<table>
 	<tr>
-		<td colspan=6>
+		<td colspan=5>
 			<h2>Your News Updates</h2>
 		</td>
 	</tr>
@@ -73,7 +76,6 @@
 		<td><a href="{{ row.source }}">{{ row.author }}</a></td>
 		<td>{{ row.newsoutlet }}</td>
 		<td>{{ row.newstime }}</td>
-		<td></td>
 	</tr>
 	{% endfor %}
 </table>
