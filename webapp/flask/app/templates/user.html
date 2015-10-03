@@ -8,7 +8,7 @@
 </script>
 <script type=text/javascript>
 function update_userdata() {
-$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', user: {{ user }}, 
+	$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {user: {{ user }} }, 
 	function(data) {
 		var portfolio = "";
 		var trades = "";
