@@ -57,6 +57,15 @@ def get_user():
     latest_trades, portfolio, latest_news = _get_user_data(request.args.get("user"))
     return render_template("user.html", user=user, latest_trades = latest_trades, portfolio = portfolio, latest_news = latest_news)
 
+@app.route('/retrieve_user_data')
+def retrieve_user_data():
+    user=request.args.get("user")
+    latest_trades, portfolio, latest_news = _get_user_data(request.args.get("user"))
+    trades_json = [{"company" = row.company, "num_stock" = row.num_stock, "tradetime" = row.tradetime} for row in latest_trades]
+    portfolio_json = [{"company" = row["company"], "stock_total" = row["stock_total"], "contact_limit" = row["contact_limit"], "portfolio_ratio" = row["portfolio_ratio"], "graphic" = row["graphic"]} for row iin portfolio]
+    news_json = [{"company" = row.company, "summary" = row.summary, "newsoutlet" = row.newsoutlet, "source" = row.source, "author" = row.author, "newstime" = row.newstime} for row in latest_news]
+    return jsonify(latest_trades = trades_json, portfolio = portfolio_json, news = news_json)
+
 @app.route('/tradesummary/<user>')
 def get_trade_summary(user):
     #check which database to query
