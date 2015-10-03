@@ -17,6 +17,15 @@ function update_userdata() {
 			trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock + "</td></tr>"
 		}
 		document.getElementById("trades").innerHTML = trades
+		for(var i=0; i<data.portfolio.length;i++) {
+			portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].graphic + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].stock_total +  "</td></tr>"
+		}
+		document.getElementById("portfolio").innerHTML = portfolio
+		for(var i=0; i<data.news.length;i++) {
+		news += "<tr><td>" + data.news[i].company + "</td><td>" + data.news[i].summary + "</td><td><a href='" + data.news[i].source + "'>" + data.news[i].author + "</a></td><td>" + data.news[i].newsoutlet + "</td><td>" + data.news[i].newstime + "</td><td>" + "</td></tr>"
+		}
+		document.getElementById("news").innerHTML = news
+
 	});
 }
 
@@ -27,6 +36,7 @@ $(function() {
 <body>
 <h1>Hello, User {{user}}</h1>
 <table>
+	<thead>
 	<tr>
 		<td colspan=4>
 			<h2>Your Portfolio</h2>
@@ -37,6 +47,8 @@ $(function() {
 		<td colspan=2>Percentage of Portfolio</td>
 		<td>Number of Shares</td>
 	</tr>
+	</thead>
+	<tbody id="portfolio">
 	{% for row in portfolio %}
 	<tr>
 		<td>{{ row["company"] }}</td>
@@ -45,6 +57,7 @@ $(function() {
 		<td>{{ row["stock_total"] }}</td>
 	</tr>
 	{% endfor %}
+	</tbody>
 </table>
 <table>
 	<thead>
@@ -70,6 +83,7 @@ $(function() {
 	</tbody>
 </table>
 <table>
+	<thead>
 	<tr>
 		<td colspan=5>
 			<h2>Your News Updates</h2>
@@ -82,6 +96,8 @@ $(function() {
 		<td>News Outlet</td>
 		<td>Time of Release</td>
 	</tr>
+	</thead>
+	<tbody id="news">
 	{% for row in latest_news %}
 	<tr>
 		<td>{{ row.company }}</td>
@@ -91,6 +107,7 @@ $(function() {
 		<td>{{ row.newstime }}</td>
 	</tr>
 	{% endfor %}
+	</tbody>
 </table>
 </body>
 </html>
