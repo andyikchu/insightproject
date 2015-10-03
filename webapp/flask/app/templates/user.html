@@ -3,7 +3,18 @@
 <title>AutoNews Financial - Welcome User {{user}}</title>
 </head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script>
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<script type=text/javascript>
+    $(document).ready(
+            function() {
+                setInterval(function() {
+                    $.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {
+                          }, function(data) {
+                          });
+                }, 2000);
+            });
 </script>
 <body>
 <h1>Hello, User {{user}}</h1>
