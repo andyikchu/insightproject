@@ -71,5 +71,5 @@ for users in session.execute("SELECT user, portfolio_total FROM stock_totals_bat
         else:
             rts_ratio = abs(rts_stock)/float(rts_total)
 
-        session.execute(st_setcount,(user, company, rts_stock, rts_ratio, rts_contact,))
+        session.execute(st_setcount,(user, row.company, rts_stock, rts_ratio, rts_contact,))
         session.execute(st_settotal,(user, rts_total,))
