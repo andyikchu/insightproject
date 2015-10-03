@@ -8,7 +8,7 @@
 </script>
 <script type=text/javascript>
 function update_userdata() {
-$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {{ user }}, 
+$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', user: {{ user }}, 
 	function(data) {
 		var portfolio = "";
 		var trades = "";
@@ -47,6 +47,7 @@ $(function() {
 	{% endfor %}
 </table>
 <table>
+	<thead>
 	<tr>
 		<td colspan=3>
 			<h2>Your Recent Trades</h2>
@@ -57,7 +58,8 @@ $(function() {
 		<td>Trade Time</td>
 		<td>Number of Shares</td>
 	</tr>
-	<div id="trades">
+	</thead>
+	<tbody id="trades">
 	{% for row in latest_trades %}
 	<tr>
 		<td>{{ row.company }}</td>
@@ -65,7 +67,7 @@ $(function() {
 		<td>{{ row.num_stock }}</td>
 	</tr>
 	{% endfor %}
-	</div>
+	</tbody>
 </table>
 <table>
 	<tr>
