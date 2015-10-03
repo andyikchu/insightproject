@@ -12,6 +12,13 @@
                 setInterval(function() {
                     $.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {
                           }, function(data) {
+													var portfolio = "";
+													var trades = "";
+													var news = "";
+													for(var i=0; i<data.latest_trades.length;i++) {
+														trades += "<tr><td>data.latest_trades[i].company</td><td>data.latest_trades[i].tradetime</td><td>data.latest_trades[i].num_stock</td></tr>"
+														document.getElementById("trades").innerHTML = trades
+													}
                           });
                 }, 2000);
             });
@@ -49,6 +56,7 @@
 		<td>Trade Time</td>
 		<td>Number of Shares</td>
 	</tr>
+	<div id="trades">
 	{% for row in latest_trades %}
 	<tr>
 		<td>{{ row.company }}</td>
@@ -56,7 +64,9 @@
 		<td>{{ row.num_stock }}</td>
 	</tr>
 	{% endfor %}
-	<table>
+	</div>
+</table>
+<table>
 	<tr>
 		<td colspan=5>
 			<h2>Your News Updates</h2>
