@@ -69,7 +69,7 @@ def retrieve_user_data():
     return _get_json_user_data(request.args.get("user"))
 
 @app.route('/retrieve_user_data/<user>')
-def retrieve_user_data(user):
+def retrieve_user_data_api(user):
     return _get_json_user_data(user)
 
 @app.route('/tradesummary/<user>')
