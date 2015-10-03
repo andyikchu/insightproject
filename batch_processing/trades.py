@@ -5,7 +5,9 @@ from pyspark.sql import SQLContext
 from pyspark.sql.types import *
 from cqlengine import connection
 from cqlengine.connection import get_session
+import sys
 
+file=sys.argv[1]
 conf = SparkConf().setAppName("Finance News, Batch Trades").set("spark.cores.max", "120")
 sc = SparkContext(conf=conf) 
 sqlContext = SQLContext(sc) 
@@ -14,7 +16,7 @@ json_format = [StructField("user", StringType(), True),
         StructField("company", StringType(), True),
         StructField("numstock", IntegerType(), True),
         StructField("timestamp", StringType(), True)]
-df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000/camus/topics/trades/*/*/*/*/*/*", StructType(json_format))
+df = sqlContext.read.json("hdfs://ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9000" + file, StructType(json_format))
 
 #calculate current stock count holdings for each user and company
 df.registerTempTable("trade_history")
