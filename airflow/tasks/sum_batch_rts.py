@@ -58,7 +58,7 @@ for users in session.execute("SELECT user, portfolio_total FROM stock_totals_bat
     batch_portfolio_total = users.portfolio_total
     for row in session.execute("SELECT user, company, stock_total, portfolio_ratio FROM stock_counts_batch WHERE user = '" + user + "'"):
         #get the stock count and total from the real time table
-        rts_stocks = session.execute(st_getcount, (user, company, ))
+        rts_stocks = session.execute(st_getcount, (user, row.company, ))
         rts_totals = session.execute(st_gettotal, (user, ))
         rts_stock = 0 if len(rts_stocks) == 0 else rts_stocks[0].stock_total
         rts_total = 0 if len(rts_totals) == 0 else rts_totals[0].portfolio_total
