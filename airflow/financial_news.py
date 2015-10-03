@@ -39,7 +39,7 @@ trades_batch_a.set_upstream(camus_a)
 #Update Cassandra's stream 2 table to include counts from the batch run with all the trades summed from stock_count_rts1, which were the trades that came in since task1_camus started running
 sum_batch_a_rts2 = BashOperator(
         task_id = 'sum_batch_a_rts2',
-        bash_command='tasks/sum_batch_rts rts2',
+        bash_command='tasks/sum_batch_rts.sh rts2',
         depends_on_past=1,
         dag = dag)
 
@@ -106,7 +106,7 @@ trades_batch_b.set_upstream(camus_b)
 #Update Cassandra's stream 1 table to include counts from the batch run with all the trades summed from stock_count_rts2, which were the trades that came in since task8_camus started running
 sum_batch_b_rts1 = BashOperator(
         task_id = 'sum_batch_b_rts1',
-        bash_command='tasks/sum_batch_rts rts1',
+        bash_command='tasks/sum_batch_rts.sh rts1',
         depends_on_past=1,
         dag = dag)
 
