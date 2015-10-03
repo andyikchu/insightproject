@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -eu
 
 . ~/address.sh 
 ssh -i ~/.ssh/insight-andy.pem ubuntu@$master_pubdns <<- 'ENDSSH'

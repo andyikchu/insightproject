@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -eu
 
 . ~/address.sh 
 dir=`dirname $0`
