@@ -7,20 +7,22 @@
   var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
 <script type=text/javascript>
-    $(document).ready(
-            function() {
-                setInterval(function() {
-									$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {{ user }}, function(data) {
-													var portfolio = "";
-													var trades = "";
-													var news = "";
-													for(var i=0; i<data.latest_trades.length;i++) {
-														trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock = "</td></tr>"
-													}
-													document.getElementById("trades").innerHTML = trades
-                          });
-                }, 2000);
-            });
+function update_userdata() {
+$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {{ user }}, 
+	function(data) {
+		var portfolio = "";
+		var trades = "";
+		var news = "";
+		for(var i=0; i<data.latest_trades.length;i++) {
+			trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock = "</td></tr>"
+		}
+		document.getElementById("trades").innerHTML = trades
+	});
+}
+
+$(function() {
+	setInterval(update_userdata, 2000);
+});
 </script>
 <body>
 <h1>Hello, User {{user}}</h1>
