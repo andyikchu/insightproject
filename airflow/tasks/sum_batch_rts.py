@@ -7,11 +7,11 @@ import sys
 #TODO: improve argument parsing with getopt and handling for bad input
 rts = sys.argv[1]
 if rts == "rts1":
-    stock_counts_table = stock_counts_rts1
-    stock_totals_table = stock_counts_rts1
+    stock_counts_table = "stock_counts_rts1"
+    stock_totals_table = "stock_totals_rts1"
 if rts == "rts2":
-    stock_counts_table = stock_counts_rts2
-    stock_totals_table = stock_counts_rts2
+    stock_counts_table = "stock_counts_rts2"
+    stock_totals_table = "stock_totals_rts2"
 
 cluster = Cluster(['ec2-54-215-237-86.us-west-1.compute.amazonaws.com'])
 session = cluster.connect("finance_news") 
