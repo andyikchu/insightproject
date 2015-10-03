@@ -14,7 +14,7 @@ function update_userdata() {
 		var trades = "";
 		var news = "";
 		for(var i=0; i<data.latest_trades.length;i++) {
-			trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock = "</td></tr>"
+			trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock + "</td></tr>"
 		}
 		document.getElementById("trades").innerHTML = trades
 	});
