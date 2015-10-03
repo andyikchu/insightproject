@@ -10,8 +10,7 @@
     $(document).ready(
             function() {
                 setInterval(function() {
-                    $.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {
-                          }, function(data) {
+									$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {{ user }}, function(data) {
 													var portfolio = "";
 													var trades = "";
 													var news = "";
