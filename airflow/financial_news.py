@@ -17,7 +17,7 @@ default_args = {
 }
 
 dag = DAG(
-    'financial_news', default_args=default_args, schedule_interval=timedelta(1))
+    'financial_news', default_args=default_args, schedule_interval=timedelta(2))
 
 #Run Camus to pull messages from Kafka into HDFS
 camus_a = BashOperator(
@@ -54,16 +54,6 @@ stop_trade_stream_a = BashOperator(
 
 stop_trade_stream_a.set_upstream(sum_batch_a_rts2)
 
-
-#Empty Cassandra's stock_count_rts1 table to set initial counts to the result of the batch calculation
-initialize_db_a_rts1 = BashOperator(
-        task_id = 'initialize_db_a_rts1',
-        bash_command='tasks/truncate_rts1.sh',
-        depends_on_past=1,
-        dag = dag)
-
-initialize_db_a_rts1.set_upstream(stop_trade_stream_a)
-
 #Get the web interface to start reading from the newly batch updated rts2
 swap_web_db_a_rts2 =  BashOperator(
         task_id = 'swap_web_db_a_rts2',
@@ -72,6 +62,15 @@ swap_web_db_a_rts2 =  BashOperator(
         dag = dag)
 
 swap_web_db_a_rts2.set_upstream(stop_trade_stream_a)
+
+#Empty Cassandra's stock_count_rts1 table to set initial counts to the result of the batch calculation
+initialize_db_a_rts1 = BashOperator(
+        task_id = 'initialize_db_a_rts1',
+        bash_command='tasks/truncate_rts1.sh',
+        depends_on_past=1,
+        dag = dag)
+
+initialize_db_a_rts1.set_upstream(swap_web_db_a_rts2)
 
 #start the trades stream back up
 start_trade_stream_a = BashOperator(
@@ -121,15 +120,6 @@ stop_trade_stream_b = BashOperator(
 
 stop_trade_stream_b.set_upstream(sum_batch_b_rts1)
 
-#Empty Cassandra's stock_count_rts2 table to set initial counts to the result of the batch calculation
-initialize_db_b_rts2 = BashOperator(
-        task_id = 'initialize_db_b_rts2',
-        bash_command='tasks/truncate_rts2.sh',
-        depends_on_past=1,
-        dag = dag)
-
-initialize_db_b_rts2.set_upstream(stop_trade_stream_b)
-
 #Get the web interface to start reading from the newly batch updated rts1
 swap_web_db_b_rts1 =  BashOperator(
         task_id = 'swap_web_db_b_rts1',
@@ -138,6 +128,15 @@ swap_web_db_b_rts1 =  BashOperator(
         dag = dag)
 
 swap_web_db_b_rts1.set_upstream(stop_trade_stream_b)
+
+#Empty Cassandra's stock_count_rts2 table to set initial counts to the result of the batch calculation
+initialize_db_b_rts2 = BashOperator(
+        task_id = 'initialize_db_b_rts2',
+        bash_command='tasks/truncate_rts2.sh',
+        depends_on_past=1,
+        dag = dag)
+
+initialize_db_b_rts2.set_upstream(swap_web_db_b_rts1)
 
 #start the trades stream back up
 start_trade_stream_b = BashOperator(
