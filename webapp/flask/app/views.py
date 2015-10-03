@@ -59,7 +59,6 @@ def get_user():
 
 @app.route('/retrieve_user_data/<user>')
 def retrieve_user_data(user):
-    user=request.args.get("user")
     latest_trades, portfolio, latest_news = _get_user_data(user)
     trades_json = [{"company": row.company, "num_stock": row.num_stock, "tradetime": row.tradetime} for row in latest_trades]
     portfolio_json = [{"company": row["company"], "stock_total": row["stock_total"], "contact_limit": row["contact_limit"], "portfolio_ratio": row["portfolio_ratio"], "graphic": row["graphic"]} for row in portfolio]
