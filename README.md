@@ -32,6 +32,10 @@ AutoNews Financial reads in user trades and news as JSON messages using Kafka. T
 
 ## Data Synthesis
 
+User trades are simulated using a set of 1,000,000 users and the 30 companies that make up the Dow Jones Industrial Average. Every second, a random sample of 500,000 users select 1 of the 30 companies to trade. Trades are generated from a normal distribution and sent to Kafka as a JSON message using the rkafka library, v1.0. In addition, users 1 to 10 are selected as "super-traders" for the purposes of the project demonstration. Every second, 6 of these 10 users each select between 1 to 3 companies and makes a trade using the same method.
+
+News for the demo are synthesized using a historical set of Twitter tweets extracted from the API which matches the 30 companies. Every second, 1 tweet is selected from 1 company's news and sent with the current timestamp. A live stream of Twitter messages are also being pulled from the API and sent as real tweets. In addition, daily editions of the Financial Times from 2010 to 2015 have been downloaded onto Amazon S3, and converted to text using Xpdf. The ability to process and send summaries of these articles have yet to be implemented.
+
 ## Batch Processing
 
 ## Real-Time Processing
