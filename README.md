@@ -26,6 +26,16 @@ AutoNews Financial reads in news from various sources and pushes them to users a
 
 ## How It Works
 
-AutoNews Financial reads in user trades and news as JSON messages using Kafka. These are processed in real-time using Spark Streaming, and updated share counts and news are updated in a Cassandra database. On the batch layer, Camus periodly loads Kafka messages into HDFS. The historical trades are then processed in bulk (half billion trades as of Oct 1, 2015) using Spark and the share counts are loaded into Cassandra. Lambda architecture is implemented using Airflow, which maintains real-time counts from Spark Streaming while ensuring eventual consistency using the results of the batch calculations (see below).
+AutoNews Financial reads in user trades and news as JSON messages using Kafka. These are processed in real-time using Spark Streaming, and updated share counts and news are updated in a Cassandra database. On the batch layer, Camus periodly loads Kafka messages into HDFS. The complete set of historical trades (half billion records as of Oct 1, 2015) are then processed in bulk using Spark and the share counts are loaded into Cassandra. Lambda architecture is implemented using Airflow, which maintains real-time counts from Spark Streaming while ensuring eventual consistency using the results of the batch calculations (see Lambda Architecture below).
 
 ![Pipeline] (images/pipeline.png)
+
+## Data Synthesis
+
+## Batch Processing
+
+## Real-Time Processing
+
+## Lambda Architecture
+
+## API Calls
