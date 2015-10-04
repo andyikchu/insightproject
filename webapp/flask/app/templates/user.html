@@ -79,7 +79,7 @@ function hideportfolio() {
 	<tr>
 		<td>{{ portfolio[i]["company"] }}</td>
 		<td>{% if portfolio[i]["stock_total"] < 0 %} {{ -1 * portfolio[i]["stock_total"]|int }} (short) {% else %} {{ portfolio[i]["stock_total"] }} {% endif %}</td>
-		<td>{{ portfolio[i]["portfolio_ratio"]|abs }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"]|float|abs }}</td>
 		<td>{{ portfolio[i]["graphic"] }}</td>
 	</tr>
 	{% endif %}
