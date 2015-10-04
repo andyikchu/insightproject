@@ -26,9 +26,9 @@ function update_userdata() {
 				shares=shares + " (short)";
 			} 
 			if(i < 5) {
-				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
+				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "%</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			} else {
-				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
+				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "%</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			}
 		}
 		document.getElementById("portfolio").innerHTML = portfolio;
@@ -79,7 +79,7 @@ function hideportfolio() {
 	<tr>
 		<td>{{ portfolio[i]["company"] }}</td>
 		<td>{% if portfolio[i]["stock_total"] < 0 %} {{ -1 * portfolio[i]["stock_total"]|int }} (short) {% else %} {{ portfolio[i]["stock_total"] }} {% endif %}</td>
-		<td>{{ portfolio[i]["portfolio_ratio"]|float|abs }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"]|float|abs }}%</td>
 		<td>{{ portfolio[i]["graphic"] }}</td>
 	</tr>
 	{% endif %}
@@ -91,7 +91,7 @@ function hideportfolio() {
 	<tr>
 		<td>{{ portfolio[i+5]["company"] }}</td>
 		<td>{% if portfolio[i+5]["stock_total"] < 0 %} {{ -1 * portfolio[i+5]["stock_total"]|int }} (short) {% else %} {{ portfolio[i+5]["stock_total"] }} {% endif %}</td>
-		<td>{{ portfolio[i+5]["portfolio_ratio"]|float|abs }}</td>
+		<td>{{ portfolio[i+5]["portfolio_ratio"]|float|abs }}%</td>
 		<td>{{ portfolio[i+5]["graphic"] }}</td>
 	</tr>
 	{% endif %}
