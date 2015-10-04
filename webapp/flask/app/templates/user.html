@@ -11,20 +11,26 @@ function update_userdata() {
 	$.getJSON($SCRIPT_ROOT + '/retrieve_user_data', {user: {{ user }} }, 
 	function(data) {
 		var portfolio = "";
+		var portfolio_extra = "";
 		var trades = "";
 		var news = "";
 		for(var i=0; i<data.latest_trades.length;i++) {
-			trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock + "</td></tr>"
+			trades += "<tr><td>" + data.latest_trades[i].company + "</td><td>" + data.latest_trades[i].tradetime + "</td><td>" + data.latest_trades[i].num_stock + "</td></tr>";
 		}
-		document.getElementById("trades").innerHTML = trades
+		document.getElementById("trades").innerHTML = trades;
 		for(var i=0; i<data.portfolio.length;i++) {
-			portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].graphic + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].stock_total +  "</td></tr>"
+			if(i < 5) {
+				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].graphic + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].stock_total +  "</td></tr>";
+			} else {
+				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].graphic + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].stock_total +  "</td></tr>";
+			}
 		}
-		document.getElementById("portfolio").innerHTML = portfolio
+		document.getElementById("portfolio").innerHTML = portfolio;
+		document.getElementById("portfolio_extra").innerHTML = portfolio_extra;
 		for(var i=0; i<data.news.length;i++) {
-		news += "<tr><td>" + data.news[i].company + "</td><td>" + data.news[i].summary + "</td><td><a href='" + data.news[i].source + "'>" + data.news[i].author + "</a></td><td>" + data.news[i].newsoutlet + "</td><td>" + data.news[i].newstime + "</td><td>" + "</td></tr>"
+		news += "<tr><td>" + data.news[i].company + "</td><td>" + data.news[i].summary + "</td><td><a href='" + data.news[i].source + "'>" + data.news[i].author + "</a></td><td>" + data.news[i].newsoutlet + "</td><td>" + data.news[i].newstime + "</td><td>" + "</td></tr>";
 		}
-		document.getElementById("news").innerHTML = news
+		document.getElementById("news").innerHTML = news;
 
 	});
 }
@@ -49,13 +55,27 @@ $(function() {
 	</tr>
 	</thead>
 	<tbody id="portfolio">
-	{% for row in portfolio %}
+	{% for i in range(5) %}
+	{% if i < portfolio|length %}
 	<tr>
-		<td>{{ row["company"] }}</td>
-		<td>{{ row["graphic"] }}</td>
-		<td>{{ row["portfolio_ratio"] }}</td>
-		<td>{{ row["stock_total"] }}</td>
+		<td>{{ portfolio[i]["company"] }}</td>
+		<td>{{ portfolio[i]["graphic"] }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
+		<td>{{ portfolio[i]["stock_total"] }}</td>
 	</tr>
+	{% endif %}
+	{% endfor %}
+	</tbody>
+	<tbody id="portfolio_extra" hidden="true">
+	{% for i in range(portfolio|length - 5) %}
+	{% if i < portfolio|length %}
+	<tr>
+		<td>{{ portfolio[i]["company"] }}</td>
+		<td>{{ portfolio[i]["graphic"] }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
+		<td>{{ portfolio[i]["stock_total"] }}</td>
+	</tr>
+	{% endif %}
 	{% endfor %}
 	</tbody>
 </table>
