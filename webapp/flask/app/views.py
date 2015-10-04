@@ -33,16 +33,20 @@ def _get_user_data(user):
     #calculate portfolio ratios and generate list of companies above contact limit
     for row in user_companies:
         #custom limit for super-traders used in the demo
-        if user <= 10:
+        if int(user) <= 10:
             row["contact_limit"] = .05
         row["portfolio_ratio"] = 100*float(row["stock_total"])/portfolio_total
-        if row["portfolio_ratio"] > 100 * row["contact_limit"]:
+        if abs(row["portfolio_ratio"]) > 100 * row["contact_limit"]:
             user_companies_list.append(row["company"])
         row["graphic"] = '|' * abs(int(round(row["portfolio_ratio"])))
         row["portfolio_ratio"] = "%.2f" % row["portfolio_ratio"]
 
     user_companies.sort(key = lambda row: abs(float(row["portfolio_ratio"])), reverse=True)
-    latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
+    if len(user_companies) > 0:
+        latest_news = session.execute("SELECT company, summary, newsoutlet, source, author, newstime FROM news WHERE company IN ('" + "','".join(user_companies_list) + "') ORDER BY newstime DESC LIMIT 10")
+    else:
+        latest_news = []
+
     return [latest_trades, user_companies, latest_news]
 
 def _get_json_user_data(user):
