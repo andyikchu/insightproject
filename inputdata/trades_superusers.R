@@ -1,4 +1,4 @@
-#10 users trade 2 companies every second
+#every second, 6 of the super-traders trade between 1 to 3 stocks
 traderIDs = seq(1,10)
 tickerIDs = c("MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS")
 
@@ -8,7 +8,9 @@ kafkanode="ec2-54-215-247-116.us-west-1.compute.amazonaws.com:9092"
 producer=rkafka.createProducer(kafkanode)
 
 generate_trades = function() {
-	trades = data.frame(trader=sort(rep(traderIDs, 2)))
+	traders = sample(traderIDs, 6)
+	numtrades_per_trader = sample(seq(1,3),length(traders), replace=T)
+	trades = data.frame(trader=sort(rep(traders, numtrades_per_trader)))
 	#associate a ticker name to trade from every trader
 	trades["ticker"] = sample(tickerIDs, nrow(trades), replace=T)
 	#associate a quantity of stock to buy or sell for each trade
