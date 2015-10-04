@@ -2,7 +2,9 @@
 #### Real-time news summaries customized to your portfolio
 
 http://m.autonews.code0.org
+
 http://autonews.code0.org
+
 [About](http://autonews.code0.org/slides)
 
 AutoNews Financial is a news service that provides news summaries to users for companies that make up a significant proportion of their portfolios. User trades are passed along to this service to customize the news to their real-time portfolios. AutoNews Financial is built upon the following technologies:
@@ -23,3 +25,7 @@ AutoNews Financial reads in news from various sources and pushes them to users a
 ![Mobile Screenshot] (images/screenshot.png)
 
 ## How It Works
+
+AutoNews Financial reads in user trades and news as JSON messages using Kafka. These are processed in real-time using Spark Streaming, and updated share counts and news are updated in a Cassandra database. On the batch layer, Camus periodly loads Kafka messages into HDFS. The historical trades are then processed in bulk (half billion trades as of Oct 1, 2015) using Spark and the share counts are loaded into Cassandra. Lambda architecture is implemented using Airflow, which maintains real-time counts from Spark Streaming while ensuring eventual consistency using the results of the batch calculations (see below).
+
+![Pipeline] (images/pipeline.png)
