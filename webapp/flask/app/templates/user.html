@@ -20,9 +20,9 @@ function update_userdata() {
 		document.getElementById("trades").innerHTML = trades;
 		for(var i=0; i<data.portfolio.length;i++) {
 			if(i < 5) {
-				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].graphic + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].stock_total +  "</td></tr>";
+				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].stock_total + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			} else {
-				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].graphic + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].stock_total +  "</td></tr>";
+				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].stock_total + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			}
 		}
 		document.getElementById("portfolio").innerHTML = portfolio;
@@ -62,8 +62,9 @@ function hideportfolio() {
 	</tr>
 	<tr>
 		<td>Stock</td>
-		<td colspan=2>Percentage of Portfolio</td>
 		<td>Number of Shares</td>
+		<td>Percentage of Portfolio</td>
+		<td>Bar Graph</td>
 	</tr>
 	</thead>
 	<tbody id="portfolio">
@@ -71,9 +72,9 @@ function hideportfolio() {
 	{% if i < portfolio|length %}
 	<tr>
 		<td>{{ portfolio[i]["company"] }}</td>
-		<td>{{ portfolio[i]["graphic"] }}</td>
-		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
 		<td>{{ portfolio[i]["stock_total"] }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
+		<td>{{ portfolio[i]["graphic"] }}</td>
 	</tr>
 	{% endif %}
 	{% endfor %}
@@ -83,9 +84,9 @@ function hideportfolio() {
 	{% if i < portfolio|length %}
 	<tr>
 		<td>{{ portfolio[i]["company"] }}</td>
-		<td>{{ portfolio[i]["graphic"] }}</td>
-		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
 		<td>{{ portfolio[i]["stock_total"] }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
+		<td>{{ portfolio[i]["graphic"] }}</td>
 	</tr>
 	{% endif %}
 	{% endfor %}
