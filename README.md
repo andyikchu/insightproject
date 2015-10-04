@@ -20,4 +20,4 @@ AutoNews Financial is a news service that provides news summaries to users for c
 
 AutoNews Financial reads in news from various sources and pushes them to users along with a link to the original source. A dashboard shows the latest trades made by the user, as well as their up-to-date portfolios. These are used to determine stocks of interest, so users do not have to manually adjust their news feed settings when they invest into or divest from particular stocks.
 
-![Mobile Screenshot](https://github.com/andyikchu/insightproject/tree/master/images/screenshot.png)
+![Mobile Screenshot] (https://github.com/andyikchu/insightproject/tree/master/images/screenshot.png)
