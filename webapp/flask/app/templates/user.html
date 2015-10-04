@@ -22,9 +22,9 @@ function update_userdata() {
 			ratio=abs(data.portfolio[i].portfolio_ratio);
 			shares=data.portfolio[i].stock_total
 			if (data.portfolio[i].stock_total < 0) {
-				shares=-1 * ratio;
+				shares=-1 * shares;
 				shares=shares + " (short)";
-			}
+			} 
 			if(i < 5) {
 				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			} else {
