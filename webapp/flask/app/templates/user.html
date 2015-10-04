@@ -19,7 +19,7 @@ function update_userdata() {
 		}
 		document.getElementById("trades").innerHTML = trades;
 		for(var i=0; i<data.portfolio.length;i++) {
-			ratio=abs(data.portfolio[i].portfolio_ratio);
+			ratio=Math.abs(data.portfolio[i].portfolio_ratio);
 			shares=data.portfolio[i].stock_total
 			if (data.portfolio[i].stock_total < 0) {
 				shares=-1 * shares;
