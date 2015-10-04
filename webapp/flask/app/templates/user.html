@@ -19,10 +19,16 @@ function update_userdata() {
 		}
 		document.getElementById("trades").innerHTML = trades;
 		for(var i=0; i<data.portfolio.length;i++) {
+			ratio=abs(data.portfolio[i].portfolio_ratio);
+			shares=data.portfolio[i].stock_total
+			if (data.portfolio[i].stock_total < 0) {
+				shares=-1 * ratio;
+				shares=shares + " (short)";
+			}
 			if(i < 5) {
-				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].stock_total + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
+				portfolio += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			} else {
-				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + data.portfolio[i].stock_total + "</td><td>" + data.portfolio[i].portfolio_ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
+				portfolio_extra += "<tr><td>" + data.portfolio[i].company + "</td><td>" + shares + "</td><td>" + ratio + "</td><td>" + data.portfolio[i].graphic +  "</td></tr>";
 			}
 		}
 		document.getElementById("portfolio").innerHTML = portfolio;
@@ -72,8 +78,8 @@ function hideportfolio() {
 	{% if i < portfolio|length %}
 	<tr>
 		<td>{{ portfolio[i]["company"] }}</td>
-		<td>{{ portfolio[i]["stock_total"] }}</td>
-		<td>{{ portfolio[i]["portfolio_ratio"] }}</td>
+		<td>{% if portfolio[i]["stock_total"] < 0 %} {{ -1 * portfolio[i]["stock_total"]|int }} (short) {% else %} {{ portfolio[i]["stock_total"] }}</td>
+		<td>{{ portfolio[i]["portfolio_ratio"]|abs }}</td>
 		<td>{{ portfolio[i]["graphic"] }}</td>
 	</tr>
 	{% endif %}
