@@ -39,6 +39,18 @@ $(function() {
 	setInterval(update_userdata, 2000);
 });
 </script>
+<script>
+function showportfolio() {
+	$("#portfolioextra").show();
+	$("#hideportfolio").show();
+	$("#showportfolio").hide();
+}
+function hideportfolio() {
+	$("#portfolioextra").hide();
+	$("#hideportfolio").hide();
+	$("#showportfolio").show();
+}
+</script>
 <body>
 <h1>Hello, User {{user}}</h1>
 <table>
@@ -79,6 +91,8 @@ $(function() {
 	{% endfor %}
 	</tbody>
 </table>
+<div id="showportfolio" onclick="showportfolio()">Show entire portfolio</div>
+<div id="hideportfolio" onclick="hideportfolio()" hidden="true">Reduce portfolio view</div>
 <table>
 	<thead>
 	<tr>
