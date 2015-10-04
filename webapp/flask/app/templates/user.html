@@ -87,6 +87,11 @@ $(function() {
 	<tr>
 		<td colspan=5>
 			<h2>Your News Updates</h2>
+			{% if user > 10 %}
+			<h5>For Stocks Greater Than 10% of Your Portfolio</h5>
+			{% else %}
+			<h5>For Stocks Greater Than 5% of Your Portfolio</h5>
+			{% endif %}
 		</td>
 	</tr>
 	<tr>
