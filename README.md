@@ -46,4 +46,8 @@ A real time stream is set up to read in trades, and another to read in news from
 
 ## Lambda Architecture
 
+As hundreds of millions of trades are read, a system that relies only on updating the current count of shares will be incorrect when an eventual system failure drops a message. The batch processing based on all historical data will guarantee a correct result, but since it takes several hours to run, it can not be used to serve real time results. A real time database manages the real-time trades using updates for the gap between batch processing runs, which is overwritten with guaranteed correct data after each batch process. The results are combined by using three sets of identical tables to track the share counts. One that stores the results of a batch run, and two that updates based on real-time trades. After a batch run finishes, one real-time database is emptied so that it captures only trades that occur since the last batch run, while the other real-time database, which only captures the previous delta, is summed with the results of the batch database results to arrive at the "eventual consistency" of the real-time results guaranteed by the lambda architecture. As each batch process runs, one real-time database tracks the current results, which the other database tracks the delta from the previous run.
+
 ## API Calls
+
+Trade, portfolio and news data used by the web interface are available through an API call to http://autonews.code0.org/retrieve_user_data/<userid>
