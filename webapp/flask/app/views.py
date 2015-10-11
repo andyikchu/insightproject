@@ -10,14 +10,12 @@ session.default_fetch_size = None #turn off paging to allow IN () ORDER BY queri
 
 def _get_user_data(user):
     #pull latest trades, latest news, and portfolio from database for the user
-    #temporary hacky method to query for all companies; TODO: redesign cassandra schema or use Presto(?) to do this 
-    COMPANIES = ["MMM", "AXP", "AAPL", "BA", "CAT", "CVX", "CSCO", "KO", "DD", "XOM", "GE", "GS", "HD", "INTC", "IBM", "JNJ", "JPM", "MCD", "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", "UNH", "UTX", "VZ", "V", "WMT", "DIS"]
     #check which database to query
     dbfile = open("/home/ubuntu/.insightproject/cassandra.txt")
     db = dbfile.readline().rstrip()
     dbfile.close()
     #get a few of the latest trades for the user
-    latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s AND company IN ('" + "','".join(COMPANIES) + "') ORDER BY tradetime DESC LIMIT 5", parameters=[user])
+    latest_trades = session.execute("SELECT company, num_stock, tradetime FROM trade_history WHERE user=%s ORDER BY tradetime DESC LIMIT 5", parameters=[user])
     #more efficient to calculate portfolio_ratios here than to update all portfolio_ratios for all companies owned by a user during stream calculation
     #TODO: remove portfolio_ratios from cassandra and batch/stream calculations
     user_companies = session.execute("SELECT company, stock_total, contact_limit FROM stock_counts_" + db + " WHERE user=%s", parameters=[user])

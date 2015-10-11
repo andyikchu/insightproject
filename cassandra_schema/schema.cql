@@ -16,7 +16,7 @@ CREATE TABLE stock_totals_rts2 (user text, portfolio_total int, PRIMARY KEY (use
 CREATE TABLE stock_totals_web (user text, portfolio_total int, PRIMARY KEY (user));
 
 --a table of the most recent trades for the user
-CREATE TABLE trade_history (user text, company text, num_stock int, tradetime timestamp, PRIMARY KEY ((user, company), tradetime), ) WITH CLUSTERING ORDER BY (tradetime DESC);
+CREATE TABLE trade_history (user text, company text, num_stock int, tradetime timestamp, PRIMARY KEY (user, tradetime, company)) WITH CLUSTERING ORDER BY (tradetime DESC);
 
 --news
 CREATE TABLE news (company text, summary text, author text, source text, newstime timestamp, newsoutlet text, PRIMARY KEY ((company), newstime), ) WITH CLUSTERING ORDER BY (newstime DESC);
