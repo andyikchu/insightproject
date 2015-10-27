@@ -1,11 +1,7 @@
 # AutoNews Financial
 #### Real-time news summaries customized to your portfolio
 
-http://m.autonews.code0.org
-
-http://autonews.code0.org
-
-[About](http://autonews.code0.org/slides)
+[About](https://docs.google.com/presentation/d/1D6ekhNEtB4NEr30Dc4DmWdgrs14BERqHAFnq8Bvl9bo/pub?start=false&loop=false&delayms=30000#slide=id.p3)
 
 AutoNews Financial is a news service that provides news summaries to users for companies that make up a significant proportion of their portfolios. User trades are passed along to this service to customize the news to their real-time portfolios. AutoNews Financial is built upon the following technologies:
 
